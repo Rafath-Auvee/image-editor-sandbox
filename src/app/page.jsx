@@ -1,7 +1,7 @@
 "use client";
 import Draggable from "react-draggable";
 import ImageEditorFunctions from "@/components/ImageEditor/ImageEditorFunctions";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 
 // import images from "@/Data/Draft_Data";
@@ -29,6 +29,15 @@ import { CiEdit, CiRedo } from "react-icons/ci";
 
 const ImageEditor = ({ params }) => {
   const [showSlider, setShowSlider] = useState(false);
+
+  const [isResizing, setIsResizing] = useState(false);
+  const [resizingTextIndex, setResizingTextIndex] = useState(null);
+  const [initialMousePosition, setInitialMousePosition] = useState({
+    x: 0,
+    y: 0,
+  });
+  const [initialFontSize, setInitialFontSize] = useState(0);
+
   const {
     devtools,
     setDevtools,
@@ -219,6 +228,62 @@ const ImageEditor = ({ params }) => {
       window.removeEventListener("resize", updateCanvasSize);
     };
   }, []);
+
+  const handleResizeMouseDown = (e, index) => {
+    e.stopPropagation();
+    setIsResizing(true);
+    setResizingTextIndex(index);
+    setInitialMousePosition({ x: e.clientX, y: e.clientY });
+    setInitialFontSize(textStyles[index].fontSize);
+
+    // Add mousemove and mouseup listeners when a corner is clicked
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+  };
+
+  const handleMouseMove = useCallback(
+    (e) => {
+      if (isResizing && resizingTextIndex !== null) {
+        // Change here: Inverting the deltaX calculation
+        const deltaX = initialMousePosition.x - e.clientX;
+        const scaleFactor = 0.1; // Adjust this as needed
+        const newFontSize = Math.max(5, initialFontSize - deltaX * scaleFactor);
+
+        setTextStyles((prevTextStyles) =>
+          prevTextStyles.map((style, index) => {
+            if (index === resizingTextIndex) {
+              return { ...style, fontSize: newFontSize };
+            }
+            return style;
+          })
+        );
+      }
+    },
+    [isResizing, resizingTextIndex, initialMousePosition, initialFontSize]
+  );
+
+  const handleMouseUp = useCallback(() => {
+    if (isResizing) {
+      setIsResizing(false);
+      setResizingTextIndex(null);
+      setInitialMousePosition({ x: 0, y: 0 });
+      setInitialFontSize(0);
+
+      // Remove listeners when the mouse button is released
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    }
+  }, [isResizing, handleMouseMove]);
+
+  useEffect(() => {
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [handleMouseMove, handleMouseUp]);
 
   return (
     <>
@@ -493,9 +558,36 @@ const ImageEditor = ({ params }) => {
                         whiteSpace: "pre-wrap",
                         // whiteSpace: "nowrap",
                         cursor: "pointer",
+                        WebkitTouchCallout: "none",
+                        WebkitUserSelect: "none",
+                        KhtmlUserSelect: "none",
+                        MozUserSelect: "none",
+                        MsUserSelect: "none",
+                        userSelect: "none",
+
                         // overflow: "hidden",
                       }}
                     >
+                      {textStyle.isSelected && (
+                        <>
+                          <div
+                            className="absolute -top-2 -left-2 w-3 h-3 bg-white rounded-full cursor-nwse-resize"
+                            onMouseDown={(e) => handleResizeMouseDown(e, index)}
+                          ></div>
+                          <div
+                            className="absolute -top-2 -right-2 w-3 h-3 bg-white rounded-full cursor-nesw-resize"
+                            onMouseDown={(e) => handleResizeMouseDown(e, index)}
+                          ></div>
+                          <div
+                            className="absolute -bottom-2 -left-2 w-3 h-3 bg-white rounded-full cursor-nesw-resize"
+                            onMouseDown={(e) => handleResizeMouseDown(e, index)}
+                          ></div>
+                          <div
+                            className="absolute -bottom-2 -right-2 w-3 h-3 bg-white rounded-full cursor-nwse-resize"
+                            onMouseDown={(e) => handleResizeMouseDown(e, index)}
+                          ></div>
+                        </>
+                      )}
                       {textStyle?.startingImage && ( // Check if the textStyle has an image property
                         <Image
                           src={textStyle?.startingImage}
