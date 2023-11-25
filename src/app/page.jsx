@@ -551,7 +551,7 @@ const ImageEditor = ({ params }) => {
                       id={`textElement_${index}`}
                       className={`absolute ${
                         textStyle.isSelected
-                          ? "border-gray-500  border-2 border-dashed"
+                          ? "border-gray-500  border-2 border-solid"
                           : ""
                       }`}
                       style={{
