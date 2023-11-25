@@ -2,26 +2,68 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+@font-face {
+  font-family: "Satoshi";
+  src: url("../fonts/Satoshi-Variable.ttf");
+  font-weight: 500;
+  font-style: normal;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+@font-face {
+  font-family: "ChopinScript";
+  src: url("../fonts/ChopinScript.otf");
+  font-weight: 500;
+  font-style: normal;
 }
 
+@font-face {
+  font-family: "AlegreyaSC-Regular";
+  src: url("../fonts/AlegreyaSC-Regular.ttf");
+}
+
+@font-face {
+  font-family: "AlegreyaSC-Bold";
+  src: url("../fonts/AlegreyaSC-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Spartan-Regular";
+  src: url("../fonts/Spartan-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+html,
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  font-family: Satoshi;
+}
+
+h1 {
+  font-family: var(--font-fraunces);
+}
+
+input {
+  outline: none;
+}
+
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    width: 12px;
+    height: 15px;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    background: #f7f4ed;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: #e0cbcb;
+    border-radius: 100vh;
+    border: 3px solid #e4e4e4;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #c0a0b9;
+  }
 }
