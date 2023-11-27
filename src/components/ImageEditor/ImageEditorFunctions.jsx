@@ -194,13 +194,13 @@ const ImageEditorFunctions = ({ params, images }) => {
       setTextStyles(updatedTextStyles);
 
       // Centering logic after updating the text styles.
-      const canvasWidth = canvasRef.current.offsetWidth;
-      const textElement = document.getElementById(`textElement_${index}`);
-      const textWidth = textElement.getBoundingClientRect().width;
-      updatedTextStyles[index].left = Math.max(
-        (canvasWidth - textWidth) / 2,
-        0
-      );
+      // const canvasWidth = canvasRef.current.offsetWidth;
+      // const textElement = document.getElementById(`textElement_${index}`);
+      // const textWidth = textElement.getBoundingClientRect().width;
+      // updatedTextStyles[index].left = Math.max(
+      //   (canvasWidth - textWidth) / 2,
+      //   0
+      // );
 
       if (imageData.imageType === "multiple image") {
         const selectedImageData = imageData.images.find(

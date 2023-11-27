@@ -3,7 +3,7 @@ import Draggable from "react-draggable";
 import ImageEditorFunctions from "@/components/ImageEditor/ImageEditorFunctions";
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
-
+import { IoResize } from "react-icons/io5";
 // import images from "@/Data/Draft_Data";
 import { fonts } from "@/Data/Fonts_Data";
 import Edit from "/public/icons/editor/edit.svg";
@@ -86,6 +86,8 @@ const ImageEditor = ({ params }) => {
     isPreviewLoading,
   } = ImageEditorFunctions({ params });
 
+  const [resizingCorner, setResizingCorner] = useState(null);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
@@ -167,7 +169,7 @@ const ImageEditor = ({ params }) => {
     setShowModal(false);
 
     // Then, center the selected text
-    handleCenterText();
+    // handleCenterText();
   };
 
   const [bounds, setBounds] = useState({
@@ -229,14 +231,17 @@ const ImageEditor = ({ params }) => {
     };
   }, []);
 
-  const handleResizeMouseDown = (e, index) => {
+  const handleResizeMouseDown = (e, index, corner) => {
     e.stopPropagation();
     setIsResizing(true);
     setResizingTextIndex(index);
     setInitialMousePosition({ x: e.clientX, y: e.clientY });
     setInitialFontSize(textStyles[index].fontSize);
+    setResizingCorner(corner);
 
-    // Add mousemove and mouseup listeners when a corner is clicked
+    // Change cursor to a resizing cursor when mouse is down
+    document.body.style.cursor = "nwse-resize";
+
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseup", handleMouseUp);
   };
@@ -244,22 +249,61 @@ const ImageEditor = ({ params }) => {
   const handleMouseMove = useCallback(
     (e) => {
       if (isResizing && resizingTextIndex !== null) {
-        // Change here: Inverting the deltaX calculation
-        const deltaX = initialMousePosition.x - e.clientX;
-        const scaleFactor = 0.1; // Adjust this as needed
-        const newFontSize = Math.max(5, initialFontSize - deltaX * scaleFactor);
+        const currentTextStyle = textStyles[resizingTextIndex];
+        let deltaWidth, deltaHeight;
+        let newLeft = currentTextStyle.left,
+          newTop = currentTextStyle.top;
+
+        // Calculate deltas
+        if (resizingCorner === "topLeft" || resizingCorner === "bottomLeft") {
+          deltaWidth = initialMousePosition.x - e.clientX;
+        } else {
+          deltaWidth = e.clientX - initialMousePosition.x;
+        }
+
+        if (resizingCorner === "topLeft" || resizingCorner === "topRight") {
+          deltaHeight = initialMousePosition.y - e.clientY;
+        } else {
+          deltaHeight = e.clientY - initialMousePosition.y;
+        }
+
+        const scaleFactor = 0.1;
+        const newFontSize = Math.max(
+          5,
+          initialFontSize + Math.max(deltaWidth, deltaHeight) * scaleFactor
+        );
+
+        // Adjust positions based on corner
+        if (resizingCorner === "bottomLeft" || resizingCorner === "topLeft") {
+          newLeft = currentTextStyle.left - deltaWidth;
+        }
+        if (resizingCorner === "topLeft" || resizingCorner === "topRight") {
+          newTop = currentTextStyle.top - deltaHeight;
+        }
 
         setTextStyles((prevTextStyles) =>
-          prevTextStyles.map((style, index) => {
-            if (index === resizingTextIndex) {
-              return { ...style, fontSize: newFontSize };
+          prevTextStyles.map((style, i) => {
+            if (i === resizingTextIndex) {
+              return {
+                ...style,
+                fontSize: newFontSize,
+                left: newLeft,
+                top: newTop,
+              };
             }
             return style;
           })
         );
       }
     },
-    [isResizing, resizingTextIndex, initialMousePosition, initialFontSize]
+    [
+      isResizing,
+      resizingTextIndex,
+      initialMousePosition,
+      initialFontSize,
+      textStyles,
+      resizingCorner,
+    ]
   );
 
   const handleMouseUp = useCallback(() => {
@@ -269,7 +313,9 @@ const ImageEditor = ({ params }) => {
       setInitialMousePosition({ x: 0, y: 0 });
       setInitialFontSize(0);
 
-      // Remove listeners when the mouse button is released
+      // Revert cursor to default when mouse is released
+      document.body.style.cursor = "default";
+
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     }
@@ -570,24 +616,35 @@ const ImageEditor = ({ params }) => {
                     >
                       {textStyle.isSelected && (
                         <>
-                          <div
+                          {/* <div
                             className="absolute -top-2 -left-2 w-3 h-3 bg-white rounded-full cursor-nwse-resize"
-                            onMouseDown={(e) => handleResizeMouseDown(e, index)}
+                            onMouseDown={(e) =>
+                              handleResizeMouseDown(e, index, "topLeft")
+                            }
                           ></div>
                           <div
                             className="absolute -top-2 -right-2 w-3 h-3 bg-white rounded-full cursor-nesw-resize"
-                            onMouseDown={(e) => handleResizeMouseDown(e, index)}
+                            onMouseDown={(e) =>
+                              handleResizeMouseDown(e, index, "topRight")
+                            }
                           ></div>
                           <div
                             className="absolute -bottom-2 -left-2 w-3 h-3 bg-white rounded-full cursor-nesw-resize"
-                            onMouseDown={(e) => handleResizeMouseDown(e, index)}
-                          ></div>
+                            onMouseDown={(e) =>
+                              handleResizeMouseDown(e, index, "bottomLeft")
+                            }
+                          ></div> */}
                           <div
-                            className="absolute -bottom-2 -right-2 w-3 h-3 bg-white rounded-full cursor-nwse-resize"
-                            onMouseDown={(e) => handleResizeMouseDown(e, index)}
-                          ></div>
+                            className="absolute bottom-0 right-0 -mb-2  -mr-4 p-1 bg-white rounded-full cursor-nwse-resize text-black"
+                            onMouseDown={(e) =>
+                              handleResizeMouseDown(e, index, "bottomRight")
+                            }
+                          >
+                            <IoResize size={15} />
+                          </div>
                         </>
                       )}
+
                       {textStyle?.startingImage && ( // Check if the textStyle has an image property
                         <Image
                           src={textStyle?.startingImage}
