@@ -86,7 +86,19 @@ const ImageEditor = ({ params }) => {
     isPreviewLoading,
   } = ImageEditorFunctions({ params });
 
+  const [rotationAngle, setRotationAngle] = useState(0); // Default angle is 0
+
   const [resizingCorner, setResizingCorner] = useState(null);
+
+  const getRotationStyle = (index) => {
+    if (index === selectedTextIndex) {
+      return {
+        transform: `rotate(${rotationAngle}deg)`,
+        transformOrigin: "center",
+      };
+    }
+    return {};
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -413,7 +425,16 @@ const ImageEditor = ({ params }) => {
               key={selectedTextIndex}
               className={`rounded border-[#CDD0DA] border flex justify-center py-4 px-7 flex-wrap md:flex-nowrap gap-x-0 md:gap-x-12`}
             >
-              <div className="flex w-full md:w-auto gap-x-0 md:gap-x-12">
+              {/* <div className="flex w-full md:w-auto gap-x-0 md:gap-x-12">
+                <div className="rotation-input-container">
+                  <label htmlFor="rotationAngle">Rotation Angle:</label>
+                  <input
+                    type="number"
+                    id="rotationAngle"
+                    value={rotationAngle}
+                    onChange={(e) => setRotationAngle(e.target.value)}
+                  />
+                </div>
                 <div
                   className="flex flex-col justify-center align-center items-center cursor-pointer flex-grow "
                   onClick={() => setShowModal(true)}
@@ -504,7 +525,7 @@ const ImageEditor = ({ params }) => {
                     Redo
                   </label>
                 </div>
-              </div>
+              </div> */}
               <div className="flex w-full md:w-auto py-3 md:py-0">
                 <button
                   onClick={handleSaveAndPreviewClick}
@@ -601,6 +622,7 @@ const ImageEditor = ({ params }) => {
                           : ""
                       }`}
                       style={{
+                        // ...getRotationStyle(index),
                         whiteSpace: "pre-wrap",
                         // whiteSpace: "nowrap",
                         cursor: "pointer",
@@ -616,24 +638,6 @@ const ImageEditor = ({ params }) => {
                     >
                       {textStyle.isSelected && (
                         <>
-                          {/* <div
-                            className="absolute -top-2 -left-2 w-3 h-3 bg-white rounded-full cursor-nwse-resize"
-                            onMouseDown={(e) =>
-                              handleResizeMouseDown(e, index, "topLeft")
-                            }
-                          ></div>
-                          <div
-                            className="absolute -top-2 -right-2 w-3 h-3 bg-white rounded-full cursor-nesw-resize"
-                            onMouseDown={(e) =>
-                              handleResizeMouseDown(e, index, "topRight")
-                            }
-                          ></div>
-                          <div
-                            className="absolute -bottom-2 -left-2 w-3 h-3 bg-white rounded-full cursor-nesw-resize"
-                            onMouseDown={(e) =>
-                              handleResizeMouseDown(e, index, "bottomLeft")
-                            }
-                          ></div> */}
                           <div
                             className="absolute bottom-0 right-0 -mb-2  -mr-4 p-1 bg-white rounded-full cursor-nwse-resize text-black"
                             onMouseDown={(e) =>
@@ -652,6 +656,7 @@ const ImageEditor = ({ params }) => {
                           width={adjustedWidth}
                           height={adjustedHeight}
                           style={{
+                            ...getRotationStyle(index),
                             // position: "relative",
                             left: adjustedLeft,
                             top: adjustedTop,
@@ -679,6 +684,7 @@ const ImageEditor = ({ params }) => {
                                   parseInt(textStyle?.fontSize) *
                                   (canvasSize.width / 415)
                                 }px`,
+                                ...getRotationStyle(index),
                                 textAlign: textStyle?.textAlign,
                                 lineHeight: textStyle?.lineHeight || 1.5,
                                 letterSpacing: adjustedLetterSpacing,

@@ -17,16 +17,6 @@ export let card = [
     cardCategory: "singlePageCard",
     textStyles: [
       {
-        id: "63131-23351-9668",
-        height: 132.8533503690146,
-        left: 115.39059448242188,
-        top: 0,
-        color: "black",
-        fontSize: "20",
-        backgroundColor: "transparent",
-        textAlign: "center",
-      },
-      {
         id: "14708-68694-8896",
         width: null,
         height: null,
