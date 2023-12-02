@@ -42,7 +42,7 @@ export let card = [
         fontSize: 31,
         backgroundColor: "#ffffff",
         fontFamily: "ChopinScript",
-        textAlign: "center",
+        textAlign: "right",
         lineHeight: 1,
       },
       {

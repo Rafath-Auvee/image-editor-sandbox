@@ -285,11 +285,38 @@ const ImageEditorFunctions = ({ params, images }) => {
   };
 
   const handleTextChange = (index, e) => {
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
+    context.font = `${textStyles[index].fontSize}px ${textStyles[index].fontFamily}`;
+
+    // Calculate initial text width
+    const initialTextWidth = context.measureText(textStyles[index].text).width;
+
+    // Update the text
+    const updatedText = e.target.value;
     const updatedTextStyles = [...textStyles];
     updatedTextStyles[index] = {
       ...updatedTextStyles[index],
-      text: e.target.value,
+      text: updatedText,
     };
+
+    // Recalculate text width
+    const updatedTextWidth = context.measureText(updatedText).width;
+
+    // Adjust left based on alignment
+    const alignment = updatedTextStyles[index].textAlign;
+    const initialLeft = updatedTextStyles[index].left;
+    if (alignment === "center") {
+      updatedTextStyles[index].left =
+        initialLeft + (initialTextWidth - updatedTextWidth) / 2;
+    } else if (alignment === "right") {
+      updatedTextStyles[index].left =
+        initialLeft + (initialTextWidth - updatedTextWidth);
+    } else {
+      updatedTextStyles[index].left = updatedTextStyles[index].left;
+    }
+
+    // Update the text styles
     setTextStyles(updatedTextStyles);
 
     if (imageData.imageType === "multiple image") {
