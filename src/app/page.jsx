@@ -425,8 +425,8 @@ const ImageEditor = ({ params }) => {
               key={selectedTextIndex}
               className={`rounded border-[#CDD0DA] border flex justify-center py-4 px-7 flex-wrap md:flex-nowrap gap-x-0 md:gap-x-12`}
             >
-              {/* <div className="flex w-full md:w-auto gap-x-0 md:gap-x-12">
-                <div className="rotation-input-container">
+              <div className="flex w-full md:w-auto gap-x-0 md:gap-x-12">
+                {/* <div className="rotation-input-container">
                   <label htmlFor="rotationAngle">Rotation Angle:</label>
                   <input
                     type="number"
@@ -434,7 +434,7 @@ const ImageEditor = ({ params }) => {
                     value={rotationAngle}
                     onChange={(e) => setRotationAngle(e.target.value)}
                   />
-                </div>
+                </div> */}
                 <div
                   className="flex flex-col justify-center align-center items-center cursor-pointer flex-grow "
                   onClick={() => setShowModal(true)}
@@ -525,7 +525,7 @@ const ImageEditor = ({ params }) => {
                     Redo
                   </label>
                 </div>
-              </div> */}
+              </div>
               <div className="flex w-full md:w-auto py-3 md:py-0">
                 <button
                   onClick={handleSaveAndPreviewClick}
