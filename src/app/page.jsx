@@ -84,6 +84,12 @@ const ImageEditor = ({ params }) => {
     setIsLoaded,
     handleTextStyleImage,
     isPreviewLoading,
+    handleUppercase,
+    handleLowercase,
+    handleCapitalize,
+    toggleBold,
+    toggleItalic,
+    toggleUnderline,
   } = ImageEditorFunctions({ params });
 
   const [rotationAngle, setRotationAngle] = useState(0); // Default angle is 0
@@ -526,6 +532,12 @@ const ImageEditor = ({ params }) => {
                   </label>
                 </div>
               </div>
+              <button onClick={toggleBold}>Bold</button>
+              <button onClick={toggleItalic}>Italic</button>
+              <button onClick={toggleUnderline}>Underline</button>
+              <button onClick={handleUppercase}>Uppercase</button>
+              <button onClick={handleLowercase}>Lowercase</button>
+              <button onClick={handleCapitalize}>Capitalize</button>
               <div className="flex w-full md:w-auto py-3 md:py-0">
                 <button
                   onClick={handleSaveAndPreviewClick}
@@ -632,6 +644,9 @@ const ImageEditor = ({ params }) => {
                         MozUserSelect: "none",
                         MsUserSelect: "none",
                         userSelect: "none",
+                        fontWeight: textStyle.fontWeight, // For bold
+                        fontStyle: textStyle.fontStyle, // For italic
+                        textDecoration: textStyle.textDecoration, // For underline
 
                         // overflow: "hidden",
                       }}

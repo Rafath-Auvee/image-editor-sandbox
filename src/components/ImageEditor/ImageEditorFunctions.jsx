@@ -756,6 +756,11 @@ const ImageEditorFunctions = ({ params, images }) => {
           textAlign: textStyle.textAlign,
           lineHeight: textStyle.lineHeight,
           letterSpacing: textStyle.letterSpacing,
+          fontWeight: textStyle.fontWeight, // For bold
+          fontStyle: textStyle.fontStyle, // For italic
+          textDecoration: textStyle.textDecoration, // For underline
+          textTransform: textStyle.textTransform, // For text transformations
+          rotationAngle: textStyle.rotationAngle || 0,
         })),
       };
     }
@@ -949,6 +954,97 @@ const ImageEditorFunctions = ({ params, images }) => {
     setTextStyles((prevTextStyles) => [...prevTextStyles, newTextStyle]);
   };
 
+  const handleUppercase = () => {
+    if (selectedTextIndex !== null) {
+      setTextStyles((prevTextStyles) =>
+        prevTextStyles.map((style, index) =>
+          index === selectedTextIndex
+            ? { ...style, text: style.text.toUpperCase() }
+            : style
+        )
+      );
+    }
+  };
+
+  const handleLowercase = () => {
+    if (selectedTextIndex !== null) {
+      setTextStyles((prevTextStyles) =>
+        prevTextStyles.map((style, index) =>
+          index === selectedTextIndex
+            ? { ...style, text: style.text.toLowerCase() }
+            : style
+        )
+      );
+    }
+  };
+
+  const handleCapitalize = () => {
+    if (selectedTextIndex !== null) {
+      setTextStyles((prevTextStyles) =>
+        prevTextStyles.map((style, index) =>
+          index === selectedTextIndex
+            ? {
+                ...style,
+                text: style.text
+                  .split(" ")
+                  .map(
+                    (word) =>
+                      word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+                  )
+                  .join(" "),
+              }
+            : style
+        )
+      );
+    }
+  };
+
+  const toggleBold = () => {
+    if (selectedTextIndex !== null) {
+      setTextStyles((prevTextStyles) =>
+        prevTextStyles.map((style, index) =>
+          index === selectedTextIndex
+            ? {
+                ...style,
+                fontWeight: style.fontWeight === "bold" ? "normal" : "bold",
+              }
+            : style
+        )
+      );
+    }
+  };
+
+  const toggleItalic = () => {
+    if (selectedTextIndex !== null) {
+      setTextStyles((prevTextStyles) =>
+        prevTextStyles.map((style, index) =>
+          index === selectedTextIndex
+            ? {
+                ...style,
+                fontStyle: style.fontStyle === "italic" ? "normal" : "italic",
+              }
+            : style
+        )
+      );
+    }
+  };
+
+  const toggleUnderline = () => {
+    if (selectedTextIndex !== null) {
+      setTextStyles((prevTextStyles) =>
+        prevTextStyles.map((style, index) =>
+          index === selectedTextIndex
+            ? {
+                ...style,
+                textDecoration:
+                  style.textDecoration === "underline" ? "none" : "underline",
+              }
+            : style
+        )
+      );
+    }
+  };
+
   return {
     devtools,
     setDevtools,
@@ -1029,6 +1125,14 @@ const ImageEditorFunctions = ({ params, images }) => {
     handleSaveToDatabase,
 
     handleAddText,
+
+    handleUppercase,
+    handleLowercase,
+    handleCapitalize,
+
+    toggleBold,
+    toggleItalic,
+    toggleUnderline,
   };
 };
 

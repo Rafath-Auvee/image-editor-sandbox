@@ -117,7 +117,7 @@ function PaginationOne({ currentPage, totalItems, itemsPerPage, paginate }) {
           <a
             onClick={handleNext}
             href="#!"
-            className={`mx-1 cursor-pointer text-sm font-semibold text-gray-900 ${
+            className={`mx-1 cursor-pointer text-sm font-semiboldgit text-gray-900 ${
               currentPage === totalPages ? "cursor-not-allowed" : ""
             }`}
           >
