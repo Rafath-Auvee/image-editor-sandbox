@@ -1,7 +1,7 @@
 "use client";
 
 // import { useSession } from "next-auth/react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 // import { usePreviewDataContext } from "@/components/PreviewDataContext/PreviewDataContext";
 import axios from "axios";
@@ -80,22 +80,50 @@ const ImageEditorFunctions = ({ params, images }) => {
     // Save the current text styles in the undo history
     setUndoHistory([...undoHistory, textStylesRef.current]);
   };
+  const textStylesRef = useRef(textStyles);
 
-  const handleUndo = () => {
+  const handleUndo = useCallback(() => {
     if (undoHistory.length > 0) {
       const prevTextStyles = undoHistory.pop();
       setRedoHistory([...redoHistory, textStylesRef.current]);
       setTextStyles(prevTextStyles);
     }
-  };
+  }, [undoHistory, redoHistory, setRedoHistory, setTextStyles, textStylesRef]);
 
-  const handleRedo = () => {
+  const handleRedo = useCallback(() => {
     if (redoHistory.length > 0) {
       const nextTextStyles = redoHistory.pop();
       setUndoHistory([...undoHistory, textStylesRef.current]);
       setTextStyles(nextTextStyles);
     }
-  };
+  }, [redoHistory, undoHistory, setUndoHistory, setTextStyles, textStylesRef]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      // Check for both Ctrl + Z and Command + Z for Undo
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        event.key.toLowerCase() === "z" &&
+        !event.shiftKey
+      ) {
+        handleUndo();
+      }
+      // Check for Ctrl + Y, Ctrl + Shift + Z, and Command + Shift + Z for Redo
+      else if (
+        (event.ctrlKey || event.metaKey) &&
+        (event.key.toLowerCase() === "y" ||
+          (event.key.toLowerCase() === "z" && event.shiftKey))
+      ) {
+        handleRedo();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleUndo, handleRedo]);
 
   const multipleImageFontSizes =
     imageData?.imageType === "multiple image"
@@ -103,8 +131,6 @@ const ImageEditorFunctions = ({ params, images }) => {
           image.textStyles.map((textStyle) => textStyle.fontSize)
         )
       : [];
-
-  const textStylesRef = useRef(textStyles);
 
   const [colorPickerVisible, setColorPickerVisible] = useState(false);
 
