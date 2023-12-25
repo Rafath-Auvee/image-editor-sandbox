@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^1.6.2",
+    "lucide-react": "^0.302.0",
     "next": "14.0.3",
     "re-resizable": "^6.9.11",
     "react": "^18",

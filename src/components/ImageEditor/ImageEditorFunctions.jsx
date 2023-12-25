@@ -12,7 +12,7 @@ const ImageEditorFunctions = ({ params, images }) => {
 
   // // console.log(session);
 
-  const [devtools, setDevtools] = useState(false);
+  const [devtools, setDevtools] = useState(true);
 
   const [showModal, setShowModal] = useState(false);
   const [previewData, setPreviewData] = useState(null);
@@ -1071,6 +1071,165 @@ const ImageEditorFunctions = ({ params, images }) => {
     }
   };
 
+  const handleImageSizeAdjustment = (event) => {
+    const newSizeAdjustment = event.target.value;
+    // Update textStyles with the new size adjustments
+    const updatedTextStyles = textStyles.map((textStyle, index) => {
+      const adjustedWidth = textStyle.width * (canvasSize.width / 415);
+      const adjustedHeight = textStyle.height * (canvasSize.height / 561);
+      const adjustedImageWidth = (adjustedWidth * newSizeAdjustment) / 100;
+      const adjustedImageHeight = (adjustedHeight * newSizeAdjustment) / 100;
+
+      // const adjustedWidth = (textStyle.width * newSizeAdjustment) / 100;
+      // const adjustedHeight = (textStyle.height * newSizeAdjustment) / 100;
+
+      // Return the updated textStyle
+      return {
+        ...textStyle,
+        width: adjustedImageWidth,
+        height: adjustedImageHeight,
+      };
+    });
+
+    setImageSizeAdjustment(newSizeAdjustment); // Update the size adjustment in state
+    setTextStyles(updatedTextStyles); // Update the textStyles in state
+  };
+
+  const handleWidthAdjustment = (event) => {
+    const newWidthAdjustment = parseInt(event.target.value);
+    setWidthAdjustment(newWidthAdjustment);
+    updateImageSize("width", newWidthAdjustment);
+  };
+
+  const handleHeightAdjustment = (event) => {
+    const newHeightAdjustment = parseInt(event.target.value);
+    setHeightAdjustment(newHeightAdjustment);
+    updateImageSize("height", newHeightAdjustment);
+  };
+
+  const updateImageSize = (dimension, adjustment) => {
+    const updatedTextStyles = textStyles.map((textStyle) => {
+      let adjustedWidth = textStyle.width * (canvasSize.width / 415);
+      let adjustedHeight = textStyle.height * (canvasSize.height / 561);
+
+      if (dimension === "width") {
+        adjustedWidth = (adjustedWidth * adjustment) / 100;
+      } else if (dimension === "height") {
+        adjustedHeight = (adjustedHeight * adjustment) / 100;
+      }
+
+      return {
+        ...textStyle,
+        width: adjustedWidth,
+        height: adjustedHeight,
+      };
+    });
+
+    setTextStyles(updatedTextStyles);
+  };
+
+  const [isResizing, setIsResizing] = useState(false);
+  const [resizingTextIndex, setResizingTextIndex] = useState(null);
+  const [initialMousePosition, setInitialMousePosition] = useState({
+    x: 0,
+    y: 0,
+  });
+  const [initialFontSize, setInitialFontSize] = useState(0);
+
+  const [rotationAngle, setRotationAngle] = useState(0); // Default angle is 0
+
+  const [resizingCorner, setResizingCorner] = useState(null);
+
+  const handleResizeMouseDown = (e, index, corner) => {
+    e.stopPropagation();
+    setIsResizing(true);
+    setResizingTextIndex(index);
+    setInitialMousePosition({ x: e.clientX, y: e.clientY });
+    setInitialFontSize(textStyles[index].fontSize);
+    setResizingCorner(corner);
+
+    // Change cursor to a resizing cursor when mouse is down
+    document.body.style.cursor = "nwse-resize";
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+  };
+
+  const handleMouseMove = useCallback(
+    (e) => {
+      if (isResizing && resizingTextIndex !== null) {
+        const currentTextStyle = textStyles[resizingTextIndex];
+        let deltaWidth, deltaHeight;
+        let newLeft = currentTextStyle.left,
+          newTop = currentTextStyle.top;
+
+        // Calculate deltas
+        if (resizingCorner === "topLeft" || resizingCorner === "bottomLeft") {
+          deltaWidth = initialMousePosition.x - e.clientX;
+        } else {
+          deltaWidth = e.clientX - initialMousePosition.x;
+        }
+
+        if (resizingCorner === "topLeft" || resizingCorner === "topRight") {
+          deltaHeight = initialMousePosition.y - e.clientY;
+        } else {
+          deltaHeight = e.clientY - initialMousePosition.y;
+        }
+
+        const scaleFactor = 0.1;
+        const newFontSize = Math.max(
+          5,
+          initialFontSize + Math.max(deltaWidth, deltaHeight) * scaleFactor
+        );
+
+        // Adjust positions based on corner
+        if (resizingCorner === "bottomLeft" || resizingCorner === "topLeft") {
+          newLeft = currentTextStyle.left - deltaWidth;
+        }
+        if (resizingCorner === "topLeft" || resizingCorner === "topRight") {
+          newTop = currentTextStyle.top - deltaHeight;
+        }
+
+        setTextStyles((prevTextStyles) =>
+          prevTextStyles.map((style, i) => {
+            if (i === resizingTextIndex) {
+              return {
+                ...style,
+                fontSize: newFontSize,
+                left: newLeft,
+                top: newTop,
+              };
+            }
+            return style;
+          })
+        );
+      }
+    },
+    [
+      isResizing,
+      resizingTextIndex,
+      initialMousePosition,
+      initialFontSize,
+      textStyles,
+      resizingCorner,
+    ]
+  );
+
+  const handleMouseUp = useCallback(() => {
+    if (isResizing) {
+      setIsResizing(false);
+      setResizingTextIndex(null);
+      setInitialMousePosition({ x: 0, y: 0 });
+      setInitialFontSize(0);
+
+      // Revert cursor to default when mouse is released
+      document.body.style.cursor = "default";
+
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    }
+  }, [isResizing, handleMouseMove]);
+
   return {
     devtools,
     setDevtools,
@@ -1159,6 +1318,16 @@ const ImageEditorFunctions = ({ params, images }) => {
     toggleBold,
     toggleItalic,
     toggleUnderline,
+
+    handleImageSizeAdjustment,
+    handleWidthAdjustment,
+    handleHeightAdjustment,
+    updateImageSize,
+
+    handleResizeMouseDown,
+    handleMouseMove,
+    handleMouseUp,
+    rotationAngle,
   };
 };
 

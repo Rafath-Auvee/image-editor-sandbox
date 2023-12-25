@@ -30,14 +30,6 @@ import { CiEdit, CiRedo } from "react-icons/ci";
 const ImageEditor = ({ params }) => {
   const [showSlider, setShowSlider] = useState(false);
 
-  const [isResizing, setIsResizing] = useState(false);
-  const [resizingTextIndex, setResizingTextIndex] = useState(null);
-  const [initialMousePosition, setInitialMousePosition] = useState({
-    x: 0,
-    y: 0,
-  });
-  const [initialFontSize, setInitialFontSize] = useState(0);
-
   const {
     devtools,
     setDevtools,
@@ -90,11 +82,11 @@ const ImageEditor = ({ params }) => {
     toggleBold,
     toggleItalic,
     toggleUnderline,
+    handleResizeMouseDown,
+    handleMouseMove,
+    handleMouseUp,
+    rotationAngle,
   } = ImageEditorFunctions({ params });
-
-  const [rotationAngle, setRotationAngle] = useState(0); // Default angle is 0
-
-  const [resizingCorner, setResizingCorner] = useState(null);
 
   const getRotationStyle = (index) => {
     if (index === selectedTextIndex) {
@@ -249,96 +241,6 @@ const ImageEditor = ({ params }) => {
     };
   }, []);
 
-  const handleResizeMouseDown = (e, index, corner) => {
-    e.stopPropagation();
-    setIsResizing(true);
-    setResizingTextIndex(index);
-    setInitialMousePosition({ x: e.clientX, y: e.clientY });
-    setInitialFontSize(textStyles[index].fontSize);
-    setResizingCorner(corner);
-
-    // Change cursor to a resizing cursor when mouse is down
-    document.body.style.cursor = "nwse-resize";
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
-  };
-
-  const handleMouseMove = useCallback(
-    (e) => {
-      if (isResizing && resizingTextIndex !== null) {
-        const currentTextStyle = textStyles[resizingTextIndex];
-        let deltaWidth, deltaHeight;
-        let newLeft = currentTextStyle.left,
-          newTop = currentTextStyle.top;
-
-        // Calculate deltas
-        if (resizingCorner === "topLeft" || resizingCorner === "bottomLeft") {
-          deltaWidth = initialMousePosition.x - e.clientX;
-        } else {
-          deltaWidth = e.clientX - initialMousePosition.x;
-        }
-
-        if (resizingCorner === "topLeft" || resizingCorner === "topRight") {
-          deltaHeight = initialMousePosition.y - e.clientY;
-        } else {
-          deltaHeight = e.clientY - initialMousePosition.y;
-        }
-
-        const scaleFactor = 0.1;
-        const newFontSize = Math.max(
-          5,
-          initialFontSize + Math.max(deltaWidth, deltaHeight) * scaleFactor
-        );
-
-        // Adjust positions based on corner
-        if (resizingCorner === "bottomLeft" || resizingCorner === "topLeft") {
-          newLeft = currentTextStyle.left - deltaWidth;
-        }
-        if (resizingCorner === "topLeft" || resizingCorner === "topRight") {
-          newTop = currentTextStyle.top - deltaHeight;
-        }
-
-        setTextStyles((prevTextStyles) =>
-          prevTextStyles.map((style, i) => {
-            if (i === resizingTextIndex) {
-              return {
-                ...style,
-                fontSize: newFontSize,
-                left: newLeft,
-                top: newTop,
-              };
-            }
-            return style;
-          })
-        );
-      }
-    },
-    [
-      isResizing,
-      resizingTextIndex,
-      initialMousePosition,
-      initialFontSize,
-      textStyles,
-      resizingCorner,
-    ]
-  );
-
-  const handleMouseUp = useCallback(() => {
-    if (isResizing) {
-      setIsResizing(false);
-      setResizingTextIndex(null);
-      setInitialMousePosition({ x: 0, y: 0 });
-      setInitialFontSize(0);
-
-      // Revert cursor to default when mouse is released
-      document.body.style.cursor = "default";
-
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
-    }
-  }, [isResizing, handleMouseMove]);
-
   useEffect(() => {
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseup", handleMouseUp);
@@ -352,15 +254,8 @@ const ImageEditor = ({ params }) => {
   return (
     <>
       {!isLoaded && <LoadingOverlay name="Editor is Opening" />}
-      {/* <Navbar /> */}
+
       <div className="flex flex-col items-center justify-center min-h-screen bg-white text-[#23272A]">
-        {/* <button
-          className="bg-[#23272A] text-white rounded px-4 py-2 mr-2 "
-          onClick={handleToggleDevtools}
-        >
-          Devtools:
-          {devtools ? "True" : "False"}
-        </button> */}
         <h1 className="text-center text-3xl font-bold leading-9 mt-5">
           {imageData?.title}
         </h1>
