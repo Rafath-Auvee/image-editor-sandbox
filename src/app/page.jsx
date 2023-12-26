@@ -86,17 +86,8 @@ const ImageEditor = ({ params }) => {
     handleMouseMove,
     handleMouseUp,
     rotationAngle,
+    getRotationStyle,
   } = ImageEditorFunctions({ params });
-
-  const getRotationStyle = (index) => {
-    if (index === selectedTextIndex) {
-      return {
-        transform: `rotate(${rotationAngle}deg)`,
-        transformOrigin: "center",
-      };
-    }
-    return {};
-  };
 
   useEffect(() => {
     const canvas = canvasRef.current;

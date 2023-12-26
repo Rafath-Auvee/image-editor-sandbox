@@ -1,5 +1,9 @@
-import React from "react";
-import { Italic, RotateCcw, RotateCw } from "lucide-react";
+"use client";
+import React, { useState } from "react";
+import { fonts } from "@/Data/Fonts_Data";
+
+import { RotateCcw, RotateCw } from "lucide-react";
+
 import { VscBold } from "react-icons/vsc";
 import { RiItalic } from "react-icons/ri";
 import { BsTypeUnderline } from "react-icons/bs";
@@ -7,21 +11,45 @@ import { IoTextOutline } from "react-icons/io5";
 import { RxLetterCaseUppercase } from "react-icons/rx";
 import { RxText } from "react-icons/rx";
 
+import AlignmentLine from "/public/svg/AlignmentLine.svg";
+import LetterSpacing from "/public/svg/LetterSpacing.svg";
+import ColorPicker from "/public/svg/color-picker.svg";
+
+import TopAlign from "/public/svg/TopAlign.svg";
+import BottomAlign from "/public/svg/BottomAlign.svg";
+import CenterAlign from "/public/svg/CenterAlign.svg";
+import AlignLeft from "/public/svg/AlignLeft.svg";
+import AlignRight from "/public/svg/AlignRight.svg";
+import AlignCenter from "/public/svg/AlignCenter.svg";
+
+import LeftText from "/public/svg/LeftText.svg";
+import RightText from "/public/svg/RightText.svg";
+import CenterText from "/public/svg/CenterText.svg";
+
 const DefaultToolbar = ({ ...props }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const hoverStyle = {
+    backgroundColor: isHovered ? "inherit" : "initial",
+    "--range-shdw": "transparent",
+  };
   return (
     <>
       <div
         key={props.selectedTextIndex}
-        className={`rounded bg-[#F6F6F6] flex flex-row justify-center items-center py-4 px-7 flex-wrap md:flex-nowrap gap-x-0 md:gap-x-3`}
+        className={`rounded bg-[#F6F6F6] flex flex-row justify-center  items-center py-4 px-7 flex-wrap md:flex-nowrap gap-x-6 gap-y-4 md:gap-y-0 md:gap-x-3`}
       >
         <select className="select select-bordered w-full max-w-max">
-          <option disabled selected>
+          <option disabled defaultValue={"Font Name"} readOnly>
             Font Name?
           </option>
-          <option>Han Solo</option>
-          <option>Greedo</option>
+          {fonts.map((font) => (
+            <option key={font.id} value={font.name}>
+              {font.name}
+            </option>
+          ))}
         </select>
-        <div className="flex items-center mx-2">
+        <section className="flex items-center mx-2">
           <button
             className="bg-white text-black border-gray-300 border px-4 py-2 rounded text-center"
             style={{ width: "40px", height: "40px" }}
@@ -29,11 +57,11 @@ const DefaultToolbar = ({ ...props }) => {
             -
           </button>
           <input
-            id={`fontSizeInput-${props.selectedTextIndex}`}
             type="text"
-            value={20}
-            className=" border-gray-300 rounded text-center"
-            style={{ width: "60px", height: "40px", textAlign: "center" }}
+            value={"0"}
+            readOnly
+            className="border-gray-300 rounded text-center"
+            style={{ width: "40px", height: "40px", textAlign: "center" }}
           />
           <button
             className="bg-white text-black border-gray-300 border px-4 py-2 rounded text-center"
@@ -41,59 +69,207 @@ const DefaultToolbar = ({ ...props }) => {
           >
             +
           </button>
-        </div>
+        </section>
 
-        <button className="bg-black text-white px-2 py-2 rounded">3</button>
-        <div className="text-2xl">
+        <section className="bg-transparent text-center text-black px-2 py-2 rounded">
+          <div className="flex flex-col ">
+            <p className="text-xl">A</p>
+            <ColorPicker />
+          </div>
+        </section>
+
+        <section className="text-2xl">
           <VscBold />
-        </div>
+        </section>
 
-        <div className="text-2xl">
+        <section className="text-2xl">
           <RiItalic />
+        </section>
+
+        <section className="flex flex-row items-center text-2xl">
+          <BsTypeUnderline />
+          <button className="inline-block ml-3 w-0.5 h-8 bg-[#DCDCDC] opacity-100 dark:opacity-50"></button>
+        </section>
+        <section className="text-2xl font-thin">AA</section>
+        <section className="text-2xl font-thin">Aa</section>
+        <section className="flex flex-row items-center text-2xl font-thin">
+          aa
+          <button className="inline-block ml-3 w-0.5 h-8 bg-[#DCDCDC] opacity-100 dark:opacity-50"></button>
+        </section>
+
+        <div className="dropdown">
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn m-1"
+            style={{ backgroundColor: "white", textAlign: "left" }}
+          >
+            <AlignmentLine />
+          </div>
+
+          <ul
+            tabIndex={0}
+            className="dropdown-content z-[1] menu p-4 shadow bg-base-100 rounded-box w-max gap-y-3" // Apply text-left here
+          >
+            <li>
+              <p>Paragraph Alignment</p>
+              <div className="flex flex-row gap-x-4  ">
+                <div className="flex flex-col   gap-y-1 place-items-center text-xs">
+                  <LeftText className="text-3xl" />
+                  Left
+                </div>
+                <div className="flex flex-col gap-y-1 place-items-center text-xs">
+                  <CenterText className="text-3xl" />
+                  Center
+                </div>
+                <div className="flex flex-col gap-y-1 place-items-center text-xs">
+                  <RightText className="text-3xl" />
+                  Right
+                </div>
+              </div>
+            </li>
+            <li>
+              <p>Align to page</p>
+              <div className="flex flex-row gap-x-4 justify-start">
+                <div className="flex flex-col gap-y-1 place-items-center text-xs">
+                  <AlignLeft className="text-3xl" />
+                  Left
+                </div>
+                <div className="flex flex-col gap-y-1 place-items-center text-xs">
+                  <AlignCenter className="text-3xl" />
+                  Center
+                </div>
+                <div className="flex flex-col gap-y-1 place-items-center text-xs">
+                  <AlignRight className="text-3xl" />
+                  Right
+                </div>
+                <div className="flex flex-col gap-y-1 place-items-center text-xs">
+                  <TopAlign className="text-3xl" />
+                  Top
+                </div>
+                <div className="flex flex-col gap-y-1 place-items-center text-xs">
+                  <BottomAlign className="text-3xl" />
+                  Bottom
+                </div>
+                <div className="flex flex-col gap-y-1 place-items-center text-xs">
+                  <CenterAlign className="text-3xl" />
+                  Center
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
 
-        <div className="flex flex-row items-center text-2xl">
-          <BsTypeUnderline />
-          <div className="inline-block ml-3 w-0.5 h-8 bg-[#DCDCDC] opacity-100 dark:opacity-50"></div>
+        <div className="dropdown">
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn m-1"
+            style={{ backgroundColor: "white", color: "initial" }}
+          >
+            <LetterSpacing />
+          </div>
+
+          <ul
+            tabIndex={0}
+            className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+          >
+            <li>
+              <div className="flex flex-col w-full ">
+                <div className="flex flex-row justify-between w-full my-2">
+                  <p>Letter Spacing</p>
+                  <input
+                    type="text"
+                    value={0}
+                    readOnly
+                    className=" border-gray-300 rounded text-center"
+                    style={{
+                      width: "40px",
+                      height: "20px",
+                      textAlign: "center",
+                    }}
+                  />
+                </div>
+                <input
+                  type="range"
+                  min={0}
+                  max="100"
+                  readOnly
+                  value="40"
+                  className="range range-xs"
+                  style={hoverStyle}
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                />
+              </div>
+            </li>
+            <li>
+              <div className="flex flex-col w-full">
+                <div className="flex flex-row justify-between w-full my-2">
+                  <p>Line Spacing</p>
+                  <input
+                    type="text"
+                    value={"0"}
+                    readOnly
+                    className=" border-gray-300 rounded text-center"
+                    style={{
+                      width: "40px",
+                      height: "20px",
+                      textAlign: "center",
+                    }}
+                  />
+                </div>
+                <input
+                  type="range"
+                  min={0}
+                  max="100"
+                  readOnly
+                  value="40"
+                  className="range range-xs"
+                  style={hoverStyle}
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                />
+              </div>
+            </li>
+          </ul>
         </div>
-        <div className="text-2xl">
-          <RxLetterCaseUppercase />
-        </div>
-        <div className="flex flex-row items-center text-2xl">
-          <IoTextOutline />
-          <div className="inline-block ml-3 w-0.5 h-8 bg-[#DCDCDC] opacity-100 dark:opacity-50"></div>
-        </div>
-        <button className="bg-black text-white px-2 py-2 rounded">9</button>
-        <div className="flex flex-row items-center">
-          <button className="bg-black text-white px-2 py-2 rounded">10</button>
-          <div className="inline-block ml-3 w-0.5 h-8 bg-[#DCDCDC] opacity-100 dark:opacity-50"></div>
-        </div>
-        <div className="flex flex-row items-center ">
+
+        <section className="inline-block ml-1 w-0.5 h-8 bg-[#DCDCDC] opacity-100 dark:opacity-50"></section>
+        <section className="flex flex-row items-center">
           <div className="indicator">
-            <span className="indicator-item indicator-bottom indicator-end badge badge-primary">
+            <span
+              className="indicator-item indicator-bottom indicator-end badge badge-primary"
+              style={{
+                width: "20px",
+                height: "20px",
+                backgroundColor: "black",
+              }}
+            >
               +
             </span>
-            <div className="grid w-10 h-10 bg-white  border border-[##CECECE] rounded place-items-center">
+            <div className="grid w-10 h-10 bg-white border border-[#CECECE] rounded place-items-center">
               <RxText className="text-xl" />
             </div>
           </div>
-        </div>
-        <div className="inline-block ml-3 w-0.5 h-8 bg-[#DCDCDC] opacity-100 dark:opacity-50"></div>
-        <div className="flex flex-col">
-          <div className="">
+        </section>
+
+        <section className="inline-block ml-3 w-0.5 h-8 bg-[#DCDCDC] opacity-100 dark:opacity-50"></section>
+        <section className="flex flex-col">
+          <button className="">
             <RotateCcw className="stroke-1" />
-          </div>
+          </button>
           {/* <p>Undo</p> */}
-        </div>
+        </section>
         {/* GAP Between Undo and Redo  */}
-        <div className="gap-x-5"></div>
-        <div className="flex flex-row items-center">
-          <div className="">
+        <section className="gap-x-5"></section>
+        <section className="flex flex-row items-center">
+          <button className="">
             <RotateCw className="stroke-1" />
-          </div>
-          <div className="inline-block ml-3 w-0.5 h-8 bg-[#DCDCDC] opacity-100 dark:opacity-50"></div>
-        </div>
-        <button className="bg-black text-white px-4 py-2 rounded">
+          </button>
+          <button className="inline-block ml-3 w-0.5 h-8 bg-[#DCDCDC] opacity-100 dark:opacity-50"></button>
+        </section>
+        <button className="bg-black w-full text-white px-4 py-2 rounded">
           Save & Preview
         </button>
       </div>

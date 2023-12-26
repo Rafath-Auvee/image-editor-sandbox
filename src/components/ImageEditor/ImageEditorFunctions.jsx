@@ -493,7 +493,7 @@ const ImageEditorFunctions = ({ params, images }) => {
       const textHeight = textElement.getBoundingClientRect().height;
 
       // Calculate the new y position to move to the bottom without crossing the border
-      const newY = 1200 - textHeight;
+      const newY = 561 - textHeight;
 
       // console.log(newY);
 
@@ -1149,11 +1149,24 @@ const ImageEditorFunctions = ({ params, images }) => {
     setResizingCorner(corner);
 
     // Change cursor to a resizing cursor when mouse is down
+    const textElement = document.getElementById(`textElement_${index}`);
+    const textRect = textElement.getBoundingClientRect();
+    const centerX = textRect.left + textRect.width / 2;
+    const centerY = textRect.top + textRect.height / 2;
+    const initialAngleRad = Math.atan2(
+      e.clientY - centerY,
+      e.clientX - centerX
+    );
+    setInitialRotationAngle((initialAngleRad * 180) / Math.PI);
+
     document.body.style.cursor = "nwse-resize";
 
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseup", handleMouseUp);
   };
+
+  const [initialRotationAngle, setInitialRotationAngle] = useState(0);
+  const [isRotating, setIsRotating] = useState(false);
 
   const handleMouseMove = useCallback(
     (e) => {
@@ -1190,12 +1203,25 @@ const ImageEditorFunctions = ({ params, images }) => {
           newTop = currentTextStyle.top - deltaHeight;
         }
 
+        // Calculate rotation
+        const centerX = currentTextStyle.left + currentTextStyle.width / 2;
+        const centerY = currentTextStyle.top + currentTextStyle.height / 2;
+        const currentAngleRad = Math.atan2(
+          e.clientY - centerY,
+          e.clientX - centerX
+        );
+        const currentAngleDeg = (currentAngleRad * 180) / Math.PI;
+
+        // Calculate the new rotation angle based on the difference from the initial angle
+        const newRotationAngle = currentAngleDeg - initialRotationAngle;
+
         setTextStyles((prevTextStyles) =>
           prevTextStyles.map((style, i) => {
             if (i === resizingTextIndex) {
               return {
                 ...style,
                 fontSize: newFontSize,
+                rotationAngle: newRotationAngle,
                 left: newLeft,
                 top: newTop,
               };
@@ -1206,6 +1232,7 @@ const ImageEditorFunctions = ({ params, images }) => {
       }
     },
     [
+      initialRotationAngle,
       isResizing,
       resizingTextIndex,
       initialMousePosition,
@@ -1221,6 +1248,7 @@ const ImageEditorFunctions = ({ params, images }) => {
       setResizingTextIndex(null);
       setInitialMousePosition({ x: 0, y: 0 });
       setInitialFontSize(0);
+      setInitialRotationAngle(0);
 
       // Revert cursor to default when mouse is released
       document.body.style.cursor = "default";
@@ -1229,6 +1257,94 @@ const ImageEditorFunctions = ({ params, images }) => {
       window.removeEventListener("mouseup", handleMouseUp);
     }
   }, [isResizing, handleMouseMove]);
+
+  const handleRotateMouseDown = (e, index) => {
+    e.stopPropagation();
+    setIsRotating(true); // A new state to track rotation
+    setResizingTextIndex(index); // Selected text index
+
+    // Calculate and set the initial rotation angle
+    const textElement = document.getElementById(`textElement_${index}`);
+    const textRect = textElement.getBoundingClientRect();
+    const centerX = textRect.left + textRect.width / 2;
+    const centerY = textRect.top + textRect.height / 2;
+    const initialAngleRad = Math.atan2(
+      e.clientY - centerY,
+      e.clientX - centerX
+    );
+    setInitialRotationAngle((initialAngleRad * 180) / Math.PI);
+
+    window.addEventListener("mousemove", handleRotateMouseMove);
+    window.addEventListener("mouseup", handleRotateMouseUp);
+  };
+
+  const handleRotateMouseMove = useCallback(
+    (e) => {
+      if (isRotating && resizingTextIndex !== null) {
+        const currentTextStyle = textStyles[resizingTextIndex];
+        const centerX = currentTextStyle.left + currentTextStyle.width / 2;
+        const centerY = currentTextStyle.top + currentTextStyle.height / 2;
+        const currentAngleRad = Math.atan2(
+          e.clientY - centerY,
+          e.clientX - centerX
+        );
+        const currentAngleDeg = (currentAngleRad * 180) / Math.PI;
+
+        // Amplify the rotation speed by multiplying the angle difference
+        const rotationSpeedFactor = 4; // Adjust this factor to control speed
+        const newRotationAngle =
+          (currentAngleDeg - initialRotationAngle) * rotationSpeedFactor;
+
+        // Apply the rotation
+        setTextStyles((prevTextStyles) =>
+          prevTextStyles.map((style, i) => {
+            if (i === resizingTextIndex) {
+              return {
+                ...style,
+                rotationAngle: style.rotationAngle + newRotationAngle,
+              };
+            }
+            return style;
+          })
+        );
+      }
+    },
+    [isRotating, resizingTextIndex, initialRotationAngle, textStyles]
+  );
+
+  const handleRotateMouseUp = useCallback(() => {
+    if (isRotating) {
+      setIsRotating(false);
+      setResizingTextIndex(null);
+      setInitialRotationAngle(0);
+
+      window.removeEventListener("mousemove", handleRotateMouseMove);
+      window.removeEventListener("mouseup", handleRotateMouseUp);
+    }
+  }, [isRotating, handleRotateMouseMove]);
+
+  const handleRotateText = (index) => {
+    setTextStyles((prevTextStyles) =>
+      prevTextStyles.map((style, i) => {
+        if (i === index) {
+          const newRotationAngle = (style.rotationAngle || 0) + 1;
+          return {
+            ...style,
+            rotationAngle: newRotationAngle,
+          };
+        }
+        return style;
+      })
+    );
+  };
+
+  const getRotationStyle = (index) => {
+    const angle = textStyles[index].rotationAngle || 0;
+    return {
+      transform: `rotate(${angle}deg)`,
+      transformOrigin: "center",
+    };
+  };
 
   return {
     devtools,
@@ -1328,6 +1444,10 @@ const ImageEditorFunctions = ({ params, images }) => {
     handleMouseMove,
     handleMouseUp,
     rotationAngle,
+    getRotationStyle,
+    handleRotateText,
+
+    handleRotateMouseDown,
   };
 };
 

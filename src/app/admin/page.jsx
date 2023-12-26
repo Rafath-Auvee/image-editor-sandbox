@@ -18,7 +18,7 @@ import {
   BiHorizontalCenter,
 } from "react-icons/bi";
 import { CiEdit, CiRedo } from "react-icons/ci";
-import { IoCloseSharp } from "react-icons/io5";
+import { IoCloseSharp, IoResize } from "react-icons/io5";
 import { BsArrowsCollapse } from "react-icons/bs";
 import { FiAlignLeft, FiAlignCenter, FiAlignRight } from "react-icons/fi";
 
@@ -28,6 +28,9 @@ import Maximum from "/public/icons/editor/maximize.svg";
 import ModalForTextEdit from "@/components/ModalForTextEdit/ModalForTextEdit";
 import TextEditingToolbar from "@/components/TextEditingToolbar/TextEditingToolbar";
 import DefaultToolbar from "@/components/DefaultToolbar/DefaultToolbar";
+
+import TextResize from "/public/svg/TextResize.svg";
+import { RefreshCw, Trash2 } from "lucide-react";
 
 const SingleCardAdminEditor = ({ params }) => {
   const {
@@ -122,6 +125,15 @@ const SingleCardAdminEditor = ({ params }) => {
     toggleBold,
     toggleItalic,
     toggleUnderline,
+
+    handleResizeMouseDown,
+    handleMouseMove,
+    handleMouseUp,
+    rotationAngle,
+    getRotationStyle,
+
+    handleRotateText,
+    handleRotateMouseDown,
   } = ImageEditorFunctions({ params });
 
   useEffect(() => {
@@ -286,7 +298,54 @@ const SingleCardAdminEditor = ({ params }) => {
             </div>
           ) : (
             <div className="flex justify-center mt-4">
-              <TextEditingToolbar selectedTextIndex={selectedTextIndex} />
+              <TextEditingToolbar
+                selectedTextIndex={selectedTextIndex}
+                showSlider={showSlider}
+                imageData={imageData}
+                selectedImageTextStyles={selectedImageTextStyles}
+                textStyles={textStyles}
+                handleFontSizeChange={handleFontSizeChange}
+                setShowModal={setShowModal}
+                handleSaveClick={handleSaveClick}
+                handleSaveToDatabase={handleSaveToDatabase}
+                handleAddText={handleAddText}
+                devtools={devtools}
+                handleLeftChange={handleLeftChange}
+                handleTopChange={handleTopChange}
+                handleTextAlignChange={handleTextAlignChange}
+                handleMoveToXAxisLeft={handleMoveToXAxisLeft}
+                handleMoveToXAxisRight={handleMoveToXAxisRight}
+                handleCenterText={handleCenterText}
+                handleMoveToYAxisTop={handleMoveToYAxisTop}
+                handleMoveToYAxisCenter={handleMoveToYAxisCenter}
+                handleMoveToYAxisBottom={handleMoveToYAxisBottom}
+                handleFontChange={handleFontChange}
+                lineHeight={lineHeight}
+                handleLineHeightChange={handleLineHeightChange}
+                letterSpacing={letterSpacing}
+                handleLetterSpacingChange={handleLetterSpacingChange}
+                setColorPickerVisible={setColorPickerVisible}
+                colorPickerVisible={colorPickerVisible}
+                handleFontColorChange={handleFontColorChange}
+                handleImageSizeAdjustment={handleImageSizeAdjustment}
+                widthAdjustment={widthAdjustment}
+                handleWidthAdjustment={handleWidthAdjustment}
+                heightAdjustment={heightAdjustment}
+                handleHeightAdjustment={handleHeightAdjustment}
+                handleUndo={handleUndo}
+                handleRedo={handleRedo}
+                handleSaveAndPreviewClick={handleSaveAndPreviewClick}
+                handleUppercase={handleUppercase}
+                handleLowercase={handleLowercase}
+                handleCapitalize={handleCapitalize}
+                toggleBold={toggleBold}
+                toggleItalic={toggleItalic}
+                toggleUnderline={toggleUnderline}
+                handleResizeMouseDown={handleResizeMouseDown}
+                handleMouseMove={handleMouseMove}
+                handleMouseUp={handleMouseUp}
+                rotationAngle={rotationAngle}
+              />
             </div>
           )}
 
@@ -309,11 +368,6 @@ const SingleCardAdminEditor = ({ params }) => {
                 const adjustedLeft = textStyle.left * (canvasSize.width / 415);
                 const adjustedTop = textStyle.top * (canvasSize.height / 561);
 
-                const adjustedImageWidth =
-                  (adjustedWidth * imageSizeAdjustment) / 100;
-                const adjustedImageHeight =
-                  (adjustedHeight * imageSizeAdjustment) / 100;
-
                 return (
                   <Draggable
                     key={index}
@@ -330,26 +384,49 @@ const SingleCardAdminEditor = ({ params }) => {
                       id={`textElement_${index}`}
                       className={`absolute ${
                         textStyle.isSelected
-                          ? "border-gray-500  border-2 border-dashed"
+                          ? "border-gray-500  border-2 border-solid"
                           : ""
                       }`}
                       style={{
+                        // ...getRotationStyle(index),
                         whiteSpace: "pre-wrap",
                         // whiteSpace: "nowrap",
                         cursor: "pointer",
+                        WebkitTouchCallout: "none",
+                        WebkitUserSelect: "none",
+                        KhtmlUserSelect: "none",
+                        MozUserSelect: "none",
+                        MsUserSelect: "none",
+                        userSelect: "none",
+                        fontWeight: textStyle.fontWeight, // For bold
+                        fontStyle: textStyle.fontStyle, // For italic
+                        textDecoration: textStyle.textDecoration, // For underline
+
                         // overflow: "hidden",
                       }}
                     >
+                      {textStyle.isSelected && (
+                        <>
+                          <div
+                            className="absolute bottom-0 right-0 -mb-2 z-30  -mr-4 p-1 bg-white rounded-full cursor-nwse-resize text-black"
+                            onMouseDown={(e) =>
+                              handleResizeMouseDown(e, index, "bottomRight")
+                            }
+                          >
+                            <TextResize size={15} />
+                          </div>
+                        </>
+                      )}
+
                       {textStyle?.startingImage && ( // Check if the textStyle has an image property
                         <Image
                           src={textStyle?.startingImage}
                           alt="Image"
-                          width={adjustedImageWidth}
-                          height={adjustedImageHeight}
+                          width={adjustedWidth}
+                          height={adjustedHeight}
                           style={{
+                            ...getRotationStyle(index),
                             // position: "relative",
-                            width: adjustedImageWidth,
-                            height: adjustedImageHeight,
                             left: adjustedLeft,
                             top: adjustedTop,
                             objectFit: textStyle?.objectFit || "contain",
@@ -376,6 +453,7 @@ const SingleCardAdminEditor = ({ params }) => {
                                   parseInt(textStyle?.fontSize) *
                                   (canvasSize.width / 415)
                                 }px`,
+                                ...getRotationStyle(index),
                                 textAlign: textStyle?.textAlign,
                                 lineHeight: textStyle?.lineHeight || 1.5,
                                 letterSpacing: adjustedLetterSpacing,
@@ -389,10 +467,21 @@ const SingleCardAdminEditor = ({ params }) => {
 
                       {textStyle?.isSelected && (
                         <button
-                          className="absolute top-0 right-0 -mt-4 -mr-4 p-1 text-red-600 bg-white rounded-full border border-gray-300 focus:outline-none"
+                          className="absolute bottom-[-40px] left-32 -mt-14 -mr-4 p-1 text-black bg-white rounded-full border border-gray-300 focus:outline-none z-30"
                           onClick={(e) => handleTextDelete(e, index)}
                         >
-                          <IoCloseSharp size={20} />
+                          <Trash2 size={14} />
+                        </button>
+                      )}
+
+                      {textStyle?.isSelected && (
+                        <button
+                          className="absolute bottom-[-40px] left-20 -mt-14 -mr-4 p-1 text-black bg-white rounded-full border border-gray-300 focus:outline-none z-30"
+                          onMouseDown={(e) =>
+                            handleRotateMouseDown(e, selectedTextIndex)
+                          }
+                        >
+                          <RefreshCw size={14} />
                         </button>
                       )}
                     </div>
@@ -417,7 +506,6 @@ const SingleCardAdminEditor = ({ params }) => {
             ></canvas>
           </div>
         </div>
-
         {imageData && imageData?.imageType === "multiple image" && (
           <div className="flex justify-center mt-4">
             {imageData.images.map((image, index) => (
