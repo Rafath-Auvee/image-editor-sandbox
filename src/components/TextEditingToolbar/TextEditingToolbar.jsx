@@ -27,6 +27,8 @@ import LeftText from "/public/svg/LeftText.svg";
 import RightText from "/public/svg/RightText.svg";
 import CenterText from "/public/svg/CenterText.svg";
 
+import EditTextIcon from "/public/svg/EditTextIcon.svg";
+
 const TextEditingToolbar = ({
   selectedTextIndex,
   showSlider,
@@ -74,13 +76,15 @@ const TextEditingToolbar = ({
   handleMouseMove,
   handleMouseUp,
   rotationAngle,
+  incrementFontSize,
+  decrementFontSize,
   ...props
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const hoverStyle = {
-    backgroundColor: isHovered ? "inherit" : "initial",
-    "--range-shdw": "transparent",
+    // backgroundColor: isHovered ? "inherit" : "initial",
+    // "--range-shdw": "transparent",
   };
   return (
     <>
@@ -107,19 +111,29 @@ const TextEditingToolbar = ({
           <button
             className="bg-white text-black border-gray-300 border px-4 py-2 rounded text-center"
             style={{ width: "40px", height: "40px" }}
+            onClick={() => decrementFontSize(selectedTextIndex)}
           >
             -
           </button>
           <input
             type="text"
-            value={"0"}
-            readOnly
+            value={
+              imageData.imageType === "multiple image"
+                ? selectedImageTextStyles[selectedTextIndex]?.fontSize
+                : textStyles.length > selectedTextIndex
+                ? textStyles[selectedTextIndex].fontSize
+                : "20"
+            }
+            onChange={(e) => handleFontSizeChange(selectedTextIndex, e)}
+            onInput={(e) => handleFontSizeChange(selectedTextIndex, e)}
+            min="5"
             className="border-gray-300 rounded text-center"
             style={{ width: "40px", height: "40px", textAlign: "center" }}
           />
           <button
             className="bg-white text-black border-gray-300 border px-4 py-2 rounded text-center"
             style={{ width: "40px", height: "40px" }}
+            onClick={() => incrementFontSize(selectedTextIndex)}
           >
             +
           </button>
@@ -176,21 +190,27 @@ const TextEditingToolbar = ({
 
         <div className="dropdown">
           <div
-            tabIndex={0}
-            role="button"
-            className="btn m-1"
-            style={{ backgroundColor: "white", textAlign: "left" }}
+            className="flex flex-col items-center"
+            style={{ marginTop: "20px" }}
           >
-            <AlignmentLine />
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn m-1"
+              style={{ backgroundColor: "white", textAlign: "left" }}
+            >
+              <AlignmentLine />
+            </div>
+            <p className="text-xs mt-1">Alignment</p>
           </div>
 
           <ul
             tabIndex={0}
             className="dropdown-content z-[1] menu p-4 shadow bg-base-100 rounded-box w-max gap-y-3" // Apply text-left here
           >
-            <li>
+            <div className="mx-4 my-2">
               <p>Paragraph Alignment</p>
-              <div className="flex flex-row gap-x-4  ">
+              <div className="flex flex-row gap-x-4  mt-3">
                 <div
                   className="flex flex-col   gap-y-1 place-items-center text-xs"
                   onClick={() => handleTextAlignChange("left")}
@@ -213,10 +233,10 @@ const TextEditingToolbar = ({
                   Right
                 </div>
               </div>
-            </li>
-            <li>
+            </div>
+            <div className="mx-4 my-2 ">
               <p>Align to page</p>
-              <div className="flex flex-row gap-x-4 justify-start">
+              <div className="flex flex-row gap-x-4 justify-start mt-3">
                 <div
                   className="flex flex-col gap-y-1 place-items-center text-xs"
                   onClick={() =>
@@ -264,31 +284,37 @@ const TextEditingToolbar = ({
                   Bottom
                 </div>
               </div>
-            </li>
+            </div>
           </ul>
         </div>
 
         <div className="dropdown">
           <div
-            tabIndex={0}
-            role="button"
-            className="btn m-1"
-            style={{ backgroundColor: "white", color: "initial" }}
+            className="flex flex-col items-center"
+            style={{ marginTop: "20px" }}
           >
-            <LetterSpacing />
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn m-1"
+              style={{ backgroundColor: "white" }}
+            >
+              <LetterSpacing />
+            </div>
+            <p className="text-xs mt-1">Spacing</p> {/* Label below the icon */}
           </div>
 
           <ul
             tabIndex={0}
-            className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+            className="dropdown-content z-[1] menu p-2 shadow bg-white rounded-box w-52 "
           >
-            <li>
+            <div className="mx-4 my-2">
               <div className="flex flex-col w-full ">
                 <div className="flex flex-row justify-between w-full my-2">
                   <p>Letter Spacing</p>
                   <input
                     type="text"
-                    value={0}
+                    value={lineHeight}
                     readOnly
                     className=" border-gray-300 rounded text-center"
                     style={{
@@ -303,21 +329,27 @@ const TextEditingToolbar = ({
                   min={0}
                   max="100"
                   readOnly
-                  value="40"
+                  value={lineHeight}
                   className="range range-xs"
+                  onChange={(e) =>
+                    handleLineHeightChange(parseFloat(e.target.value))
+                  }
+                  onInput={(e) =>
+                    handleLineHeightChange(parseFloat(e.target.value))
+                  }
                   style={hoverStyle}
                   onMouseEnter={() => setIsHovered(true)}
                   onMouseLeave={() => setIsHovered(false)}
                 />
               </div>
-            </li>
-            <li>
+            </div>
+            <div className="mx-4 my-2">
               <div className="flex flex-col w-full">
                 <div className="flex flex-row justify-between w-full my-2">
                   <p>Line Spacing</p>
                   <input
                     type="text"
-                    value={"0"}
+                    value={letterSpacing}
                     readOnly
                     className=" border-gray-300 rounded text-center"
                     style={{
@@ -332,20 +364,29 @@ const TextEditingToolbar = ({
                   min={0}
                   max="100"
                   readOnly
-                  value="40"
+                  value={letterSpacing}
+                  onChange={(e) =>
+                    handleLetterSpacingChange(parseFloat(e.target.value))
+                  }
+                  onInput={(e) =>
+                    handleLetterSpacingChange(parseFloat(e.target.value))
+                  }
                   className="range range-xs"
                   style={hoverStyle}
                   onMouseEnter={() => setIsHovered(true)}
                   onMouseLeave={() => setIsHovered(false)}
                 />
               </div>
-            </li>
+            </div>
           </ul>
         </div>
 
         <section className="inline-block ml-1 w-0.5 h-8 bg-[#DCDCDC] opacity-100 dark:opacity-50"></section>
+
+        {/* ADD TEXT  */}
+
         <section
-          className="flex flex-row items-center"
+          className="flex flex-row items-center mr-2 "
           onClick={() => handleAddText()}
         >
           <div className="indicator">
@@ -354,34 +395,73 @@ const TextEditingToolbar = ({
               style={{
                 width: "20px",
                 height: "20px",
+                marginBottom: "30px",
+                marginRight: "5px",
                 backgroundColor: "black",
               }}
             >
               +
             </span>
-            <div className="grid w-10 h-10 bg-white border border-[#CECECE] rounded place-items-center">
-              <RxText className="text-xl" />
+            <div
+              className="flex flex-col items-center"
+              style={{ marginTop: "25px" }}
+            >
+              <div className="grid w-12 h-12  bg-white border border-[#CECECE] rounded place-items-center">
+                <RxText className="text-xl" />
+              </div>
+              <p className="text-xs mt-2">Add Text</p>
             </div>
           </div>
         </section>
 
-        <section className="inline-block ml-3 w-0.5 h-8 bg-[#DCDCDC] opacity-100 dark:opacity-50"></section>
-        <section className="flex flex-col" onClick={handleUndo}>
-          <button className="">
-            <RotateCcw className="stroke-1" />
-          </button>
+        <section
+          className="flex flex-row items-center "
+          onClick={() => setShowModal(true)}
+        >
+          <div
+            className="flex flex-col items-center "
+            style={{ marginTop: "25px" }}
+          >
+            <div className="grid w-12 h-12 bg-white border border-[#CECECE] rounded place-items-center">
+              <EditTextIcon />
+            </div>
+            <p className="text-xs mt-2">Edit Text</p>
+          </div>
+        </section>
+
+        <section className="inline-block  w-0.5 h-8 bg-[#DCDCDC] opacity-100 dark:opacity-50"></section>
+        <section className="flex flex-col">
+          <div
+            className="flex flex-col items-center cursor-pointer"
+            style={{ marginTop: "32px" }}
+            onClick={handleUndo}
+          >
+            <button className="">
+              <RotateCcw className="stroke-1" size={32} />
+            </button>
+            <p className="text-xs mt-4">Undo</p>
+          </div>
           {/* <p>Undo</p> */}
         </section>
         {/* GAP Between Undo and Redo  */}
         <section className="gap-x-5"></section>
-        <section className="flex flex-row items-center" onClick={handleRedo}>
-          <button className="">
-            <RotateCw className="stroke-1" />
-          </button>
+        <section
+          className="flex flex-row items-center cursor-pointer"
+          onClick={handleRedo}
+        >
+          <div
+            className="flex flex-col items-center "
+            style={{ marginTop: "32px" }}
+          >
+            <button className="">
+              <RotateCw className="stroke-1" size={32} />
+            </button>
+            <p className="text-xs mt-4">Redo</p>
+          </div>
           <button className="inline-block ml-3 w-0.5 h-8 bg-[#DCDCDC] opacity-100 dark:opacity-50"></button>
         </section>
         <button
-          className="bg-black w-full text-white px-4 py-2 rounded"
+          className="bg-[#23272A] w-full text-white px-4 py-2 rounded"
           onClick={() => handleSaveToDatabase()}
         >
           Save & Preview

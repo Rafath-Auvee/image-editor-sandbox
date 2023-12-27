@@ -4,6 +4,9 @@ const ModalForTextEdit = ({
   selectedTextIndex,
   showModal,
   setShowModal,
+  handleUpdateButtonClick,
+  handleTextChange,
+  textStyles,
   ...props
 }) => {
   return (
@@ -29,10 +32,8 @@ const ModalForTextEdit = ({
                   <div className="relative p-6 flex-auto">
                     <textarea
                       id={`textInput-${selectedTextIndex}`}
-                      value={props.textStyles[selectedTextIndex]?.text}
-                      onChange={(e) =>
-                        props.handleTextChange(selectedTextIndex, e)
-                      }
+                      value={textStyles[selectedTextIndex]?.text}
+                      onChange={(e) => handleTextChange(selectedTextIndex, e)}
                       className="border border-gray-300 rounded px-2 py-1 mt-1 placeholder:text-black w-full resize-none"
                       style={{ whiteSpace: "pre-wrap" }}
                       rows={4} // Set the number of rows you want to display initially
@@ -50,7 +51,7 @@ const ModalForTextEdit = ({
                     <button
                       className="bg-[#23272A] text-white active:bg-[#23272A] font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                       type="button"
-                      onClick={props.handleUpdateButtonClick}
+                      onClick={handleUpdateButtonClick}
                     >
                       Update
                     </button>

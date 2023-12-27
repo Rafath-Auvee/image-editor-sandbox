@@ -1135,7 +1135,7 @@ const ImageEditorFunctions = ({ params, images }) => {
   });
   const [initialFontSize, setInitialFontSize] = useState(0);
 
-  const [rotationAngle, setRotationAngle] = useState(0); // Default angle is 0
+  // Default angle is 0
 
   const [resizingCorner, setResizingCorner] = useState(null);
 
@@ -1229,18 +1229,51 @@ const ImageEditorFunctions = ({ params, images }) => {
     }
   }, [isResizing, handleMouseMove]);
 
-  const handleRotateMouseDown = (e, index) => {};
+  const [initialX, setInitialX] = useState(0);
+  const [rotationAngle, setRotationAngle] = useState(0);
+  const [isRotating, setIsRotating] = useState(false);
 
-  const handleRotateMouseMove = useCallback((e) => {}, []);
+  const handleRotateMouseDown = (e, index) => {
+    e.stopPropagation();
+    setIsRotating(true);
+    setInitialX(e.clientX);
+    setRotationAngle(textStyles[index].rotationAngle || 0);
+    window.addEventListener("mousemove", handleRotateMouseMove);
+    window.addEventListener("mouseup", handleRotateMouseUp);
+  };
 
-  const handleRotateMouseUp = useCallback(() => {}, []);
+  const handleRotateMouseMove = useCallback(
+    (e) => {
+      if (isRotating) {
+        const deltaX = e.clientX - initialX;
+        const newAngle = rotationAngle + deltaX / 2; // Adjust the divisor to control rotation sensitivity
+        setRotationAngle(newAngle);
 
-  const handleRotateText = (index) => {};
+        // Update the rotation angle in textStyles state
+        setTextStyles((prevTextStyles) =>
+          prevTextStyles.map((style, i) =>
+            i === selectedTextIndex
+              ? { ...style, rotationAngle: newAngle }
+              : style
+          )
+        );
+      }
+    },
+    [initialX, isRotating, rotationAngle, selectedTextIndex]
+  );
+
+  const handleRotateMouseUp = useCallback(() => {
+    if (isRotating) {
+      setIsRotating(false);
+      window.removeEventListener("mousemove", handleRotateMouseMove);
+      window.removeEventListener("mouseup", handleRotateMouseUp);
+    }
+  }, [isRotating]);
 
   const getRotationStyle = (index) => {
-    // const angle = textStyles[index].rotationAngle || 0;
+    const angle = textStyles[index].rotationAngle || 0;
     return {
-      // transform: `rotate(${angle}deg)`,
+      transform: `rotate(${angle}deg)`,
       transformOrigin: "center",
     };
   };
@@ -1344,7 +1377,6 @@ const ImageEditorFunctions = ({ params, images }) => {
     handleMouseUp,
     rotationAngle,
     getRotationStyle,
-    handleRotateText,
 
     handleRotateMouseDown,
   };

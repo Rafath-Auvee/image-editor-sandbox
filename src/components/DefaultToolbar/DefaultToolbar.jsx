@@ -26,18 +26,20 @@ import LeftText from "/public/svg/LeftText.svg";
 import RightText from "/public/svg/RightText.svg";
 import CenterText from "/public/svg/CenterText.svg";
 
+import EditTextIcon from "/public/svg/EditTextIcon.svg";
+
 const DefaultToolbar = ({ ...props }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const hoverStyle = {
-    backgroundColor: isHovered ? "inherit" : "initial",
-    "--range-shdw": "transparent",
+    // backgroundColor: isHovered ? "inherit" : "initial",
+    // "--range-shdw": "transparent",
   };
   return (
     <>
       <div
         key={props.selectedTextIndex}
-        className={`rounded bg-[#F6F6F6] flex flex-row justify-center  items-center py-4 px-7 flex-wrap md:flex-nowrap gap-x-6 gap-y-4 md:gap-y-0 md:gap-x-3`}
+        className={`rounded bg-[#F6F6F6] flex flex-row justify-center items-center py-4 px-7 flex-wrap md:flex-nowrap gap-x-6 gap-y-4 md:gap-y-0 md:gap-x-3`}
       >
         <select className="select select-bordered w-full max-w-max">
           <option disabled defaultValue={"Font Name"} readOnly>
@@ -99,21 +101,27 @@ const DefaultToolbar = ({ ...props }) => {
 
         <div className="dropdown">
           <div
-            tabIndex={0}
-            role="button"
-            className="btn m-1"
-            style={{ backgroundColor: "white", textAlign: "left" }}
+            className="flex flex-col items-center"
+            style={{ marginTop: "20px" }}
           >
-            <AlignmentLine />
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn m-1"
+              style={{ backgroundColor: "white", textAlign: "left" }}
+            >
+              <AlignmentLine />
+            </div>
+            <p className="text-xs mt-1">Alignment</p>
           </div>
 
           <ul
             tabIndex={0}
             className="dropdown-content z-[1] menu p-4 shadow bg-base-100 rounded-box w-max gap-y-3" // Apply text-left here
           >
-            <li>
+            <div className="mx-4 my-2">
               <p>Paragraph Alignment</p>
-              <div className="flex flex-row gap-x-4  ">
+              <div className="flex flex-row gap-x-4  mt-3">
                 <div className="flex flex-col   gap-y-1 place-items-center text-xs">
                   <LeftText className="text-3xl" />
                   Left
@@ -127,10 +135,10 @@ const DefaultToolbar = ({ ...props }) => {
                   Right
                 </div>
               </div>
-            </li>
-            <li>
+            </div>
+            <div className="mx-4 my-2">
               <p>Align to page</p>
-              <div className="flex flex-row gap-x-4 justify-start">
+              <div className="flex flex-row gap-x-4 justify-start mt-3">
                 <div className="flex flex-col gap-y-1 place-items-center text-xs">
                   <AlignLeft className="text-3xl" />
                   Left
@@ -156,25 +164,31 @@ const DefaultToolbar = ({ ...props }) => {
                   Center
                 </div>
               </div>
-            </li>
+            </div>
           </ul>
         </div>
 
-        <div className="dropdown">
+        <div className="dropdown ">
           <div
-            tabIndex={0}
-            role="button"
-            className="btn m-1"
-            style={{ backgroundColor: "white", color: "initial" }}
+            className="flex flex-col items-center"
+            style={{ marginTop: "20px" }}
           >
-            <LetterSpacing />
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn m-1"
+              style={{ backgroundColor: "white" }}
+            >
+              <LetterSpacing />
+            </div>
+            <p className="text-xs mt-1">Spacing</p> {/* Label below the icon */}
           </div>
 
           <ul
             tabIndex={0}
             className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
           >
-            <li>
+            <div className="mx-4 my-2">
               <div className="flex flex-col w-full ">
                 <div className="flex flex-row justify-between w-full my-2">
                   <p>Letter Spacing</p>
@@ -202,8 +216,8 @@ const DefaultToolbar = ({ ...props }) => {
                   onMouseLeave={() => setIsHovered(false)}
                 />
               </div>
-            </li>
-            <li>
+            </div>
+            <div className="mx-4 my-2">
               <div className="flex flex-col w-full">
                 <div className="flex flex-row justify-between w-full my-2">
                   <p>Line Spacing</p>
@@ -231,45 +245,78 @@ const DefaultToolbar = ({ ...props }) => {
                   onMouseLeave={() => setIsHovered(false)}
                 />
               </div>
-            </li>
+            </div>
           </ul>
         </div>
 
         <section className="inline-block ml-1 w-0.5 h-8 bg-[#DCDCDC] opacity-100 dark:opacity-50"></section>
-        <section className="flex flex-row items-center">
+        <section className="flex flex-row items-center mr-2 ">
           <div className="indicator">
             <span
               className="indicator-item indicator-bottom indicator-end badge badge-primary"
               style={{
                 width: "20px",
                 height: "20px",
+                marginBottom: "30px",
+                marginRight: "5px",
                 backgroundColor: "black",
               }}
             >
               +
             </span>
-            <div className="grid w-10 h-10 bg-white border border-[#CECECE] rounded place-items-center">
-              <RxText className="text-xl" />
+            <div
+              className="flex flex-col items-center"
+              style={{ marginTop: "25px" }}
+            >
+              <div className="grid w-12 h-12  bg-white border border-[#CECECE] rounded place-items-center">
+                <RxText className="text-xl" />
+              </div>
+              <p className="text-xs mt-2">Add Text</p>
             </div>
           </div>
         </section>
 
-        <section className="inline-block ml-3 w-0.5 h-8 bg-[#DCDCDC] opacity-100 dark:opacity-50"></section>
+        <section className="flex flex-row items-center ">
+          <div
+            className="flex flex-col items-center "
+            style={{ marginTop: "25px" }}
+          >
+            <div className="grid w-12 h-12 bg-white border border-[#CECECE] rounded place-items-center">
+              <EditTextIcon />
+            </div>
+            <p className="text-xs mt-2">Edit Text</p>
+          </div>
+        </section>
+
+        <section className="inline-block w-0.5 h-8 bg-[#DCDCDC] opacity-100 dark:opacity-50"></section>
         <section className="flex flex-col">
-          <button className="">
-            <RotateCcw className="stroke-1" />
-          </button>
+          <div
+            className="flex flex-col items-center "
+            style={{ marginTop: "32px" }}
+          >
+            <button className="">
+              <RotateCcw className="stroke-1" size={32} />
+            </button>
+            <p className="text-xs mt-4">Undo</p>
+          </div>
           {/* <p>Undo</p> */}
         </section>
         {/* GAP Between Undo and Redo  */}
+        {/* <RotateCw className="stroke-1" size={32} /> */}
         <section className="gap-x-5"></section>
         <section className="flex flex-row items-center">
-          <button className="">
-            <RotateCw className="stroke-1" />
-          </button>
+          <div
+            className="flex flex-col items-center "
+            style={{ marginTop: "32px" }}
+          >
+            <button className="">
+              <RotateCw className="stroke-1" size={32} />
+            </button>
+            <p className="text-xs mt-4">Redo</p>
+          </div>
           <button className="inline-block ml-3 w-0.5 h-8 bg-[#DCDCDC] opacity-100 dark:opacity-50"></button>
         </section>
-        <button className="bg-black w-full text-white px-4 py-2 rounded">
+        <button className="bg-[#23272A] w-full text-white px-4 py-2 rounded">
           Save & Preview
         </button>
       </div>
