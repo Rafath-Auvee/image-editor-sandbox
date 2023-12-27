@@ -286,10 +286,6 @@ const SingleCardAdminEditor = ({ params }) => {
     <>
       {!isLoaded && <LoadingOverlay name="Editor is Opening" />}
       <div className="flex flex-col items-center justify-center min-h-screen bg-white text-[#23272A]">
-        <h1 className="text-center text-3xl font-bold leading-5 mt-5">
-          {imageData?.title}
-        </h1>
-
         <div id="canvas" className="my-5" onClick={handleCanvasClick}>
           {selectedTextIndex === null ? (
             <div className="flex justify-center mt-4">
@@ -561,6 +557,10 @@ const SingleCardAdminEditor = ({ params }) => {
             ></canvas>
           </div>
         </div>
+
+        <h1 className="text-center text-3xl font-bold leading-5 mt-5">
+          {imageData?.title}
+        </h1>
         {imageData && imageData?.imageType === "multiple image" && (
           <div className="flex justify-center mt-4">
             {imageData.images.map((image, index) => (
