@@ -38,7 +38,6 @@ const DefaultToolbar = ({ ...props }) => {
   return (
     <>
       <div
-        key={props.selectedTextIndex}
         className={`rounded bg-[#F6F6F6] flex flex-row justify-center items-center py-4 px-7 flex-wrap md:flex-nowrap gap-x-6 gap-y-4 md:gap-y-0 md:gap-x-3`}
       >
         <select className="select select-bordered w-full max-w-max">

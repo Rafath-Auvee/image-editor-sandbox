@@ -288,11 +288,11 @@ const SingleCardAdminEditor = ({ params }) => {
       <div className="flex flex-col items-center justify-center min-h-screen bg-white text-[#23272A]">
         <div id="canvas" className="my-5" onClick={handleCanvasClick}>
           {selectedTextIndex === null ? (
-            <div className="flex justify-center mt-4">
+            <div className="flex flex-col sm:flex-row justify-center items-center py-2 sm:py-4 px-4 sm:px-7 gap-2 sm:gap-6">
               <DefaultToolbar />
             </div>
           ) : (
-            <div className="flex justify-center mt-4">
+            <div className="flex flex-col sm:flex-row justify-center items-center py-2 sm:py-4 px-4 sm:px-7 gap-2 sm:gap-6">
               <TextEditingToolbar
                 selectedTextIndex={selectedTextIndex}
                 showSlider={showSlider}
