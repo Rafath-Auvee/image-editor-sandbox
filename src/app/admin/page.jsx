@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import Image from "next/image";
-import { ChromePicker } from "react-color";
+// import { ChromePicker } from "react-color";
 
 // import images from "@/Data/Draft_Data";
 import { fonts } from "@/Data/Fonts_Data";
@@ -10,29 +10,32 @@ import PreviewModal from "@/components/PreviewModal/PreviewModal";
 import LoadingOverlay from "@/components/LoadingOverlay/LoadingOverlay";
 import ImageEditorFunctions from "@/components/ImageEditor/ImageEditorFunctions";
 
-import {
-  BiArrowToLeft,
-  BiArrowToRight,
-  BiArrowToTop,
-  BiArrowToBottom,
-  BiHorizontalCenter,
-} from "react-icons/bi";
-import { CiEdit, CiRedo } from "react-icons/ci";
-import { IoCloseSharp, IoResize } from "react-icons/io5";
-import { BsArrowsCollapse } from "react-icons/bs";
-import { FiAlignLeft, FiAlignCenter, FiAlignRight } from "react-icons/fi";
+// import {
+//   BiArrowToLeft,
+//   BiArrowToRight,
+//   BiArrowToTop,
+//   BiArrowToBottom,
+//   BiHorizontalCenter,
+// } from "react-icons/bi";
+// import { CiEdit, CiRedo } from "react-icons/ci";
+// import { IoCloseSharp, IoResize } from "react-icons/io5";
+// import { BsArrowsCollapse } from "react-icons/bs";
+// import { FiAlignLeft, FiAlignCenter, FiAlignRight } from "react-icons/fi";
 
-import Undo from "/public/icons/undo.svg";
-import Edit from "/public/icons/editor/edit.svg";
-import Maximum from "/public/icons/editor/maximize.svg";
-import ModalForTextEdit from "@/components/ModalForTextEdit/ModalForTextEdit";
+// import Undo from "/public/icons/undo.svg";
+// import Edit from "/public/icons/editor/edit.svg";
+// import Maximum from "/public/icons/editor/maximize.svg";
+// import ModalForTextEdit from "@/components/ModalForTextEdit/ModalForTextEdit";
 import TextEditingToolbar from "@/components/TextEditingToolbar/TextEditingToolbar";
 import DefaultToolbar from "@/components/DefaultToolbar/DefaultToolbar";
 
 import TextResize from "/public/svg/TextResize.svg";
 import { RefreshCw, Trash2 } from "lucide-react";
+import BottomDefaultToolbar from "@/components/BottomNavigation/BottomDefaultToolbar";
+import BottomTextEditingToolbar from "@/components/BottomNavigation/BottomTextEditingToolbar";
 
 const SingleCardAdminEditor = ({ params }) => {
+  const draggableRef = useRef(null);
   const {
     devtools,
     setDevtools,
@@ -285,11 +288,18 @@ const SingleCardAdminEditor = ({ params }) => {
   return (
     <>
       {!isLoaded && <LoadingOverlay name="Editor is Opening" />}
-      <div className="flex flex-col items-center justify-center min-h-screen bg-white text-[#23272A]">
-        <div id="canvas" className="my-5" onClick={handleCanvasClick}>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#EEEDED] text-[#23272A]">
+        <div
+          id="canvas"
+          className="my-5 hidden lg:block"
+          onClick={handleCanvasClick}
+        >
           {selectedTextIndex === null ? (
             <div className="flex flex-col sm:flex-row justify-center items-center py-2 sm:py-4 px-4 sm:px-7 gap-2 sm:gap-6">
-              <DefaultToolbar />
+              <DefaultToolbar
+                handleSaveAndPreviewClick={handleSaveAndPreviewClick}
+                handleAddText={handleAddText}
+              />
             </div>
           ) : (
             <div className="flex flex-col sm:flex-row justify-center items-center py-2 sm:py-4 px-4 sm:px-7 gap-2 sm:gap-6">
@@ -346,14 +356,6 @@ const SingleCardAdminEditor = ({ params }) => {
             </div>
           )}
 
-          {/* <ModalForTextEdit
-            selectedTextIndex={selectedTextIndex}
-            showModal={showModal}
-            setShowModal={setShowModal}
-            handleUpdateButtonClick={handleUpdateButtonClick}
-            handleTextChange={handleTextChange}
-            textStyles={textStyles}
-          /> */}
           {showModal ? (
             <>
               <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none backdrop-blur-3xl">
@@ -422,6 +424,7 @@ const SingleCardAdminEditor = ({ params }) => {
                 return (
                   <Draggable
                     key={index}
+                    nodeRef={draggableRef}
                     position={{ x: adjustedLeft, y: adjustedTop }}
                     onStop={(e, data) => handleTextDragStop(index, data)}
                     bounds={{
@@ -433,6 +436,7 @@ const SingleCardAdminEditor = ({ params }) => {
                   >
                     <div
                       id={`textElement_${index}`}
+                      ref={draggableRef}
                       className={`absolute ${
                         textStyle.isSelected
                           ? "border-gray-500  border-2 border-solid"
@@ -478,6 +482,8 @@ const SingleCardAdminEditor = ({ params }) => {
                           style={{
                             ...getRotationStyle(index),
                             // position: "relative",
+                            width: adjustedWidth,
+                            height: adjustedHeight,
                             left: adjustedLeft,
                             top: adjustedTop,
                             objectFit: textStyle?.objectFit || "contain",
@@ -498,7 +504,7 @@ const SingleCardAdminEditor = ({ params }) => {
                             <div
                               key={lineIndex}
                               style={{
-                                color: textStyle?.backgroundColor, // Apply the font color here
+                                color: textStyle?.backgroundColor,
                                 fontFamily: textStyle?.fontFamily,
                                 fontSize: `${
                                   parseInt(textStyle?.fontSize) *
@@ -508,8 +514,10 @@ const SingleCardAdminEditor = ({ params }) => {
                                 textAlign: textStyle?.textAlign,
                                 lineHeight: textStyle?.lineHeight || 1.5,
                                 letterSpacing: adjustedLetterSpacing,
+                                textDecoration: textStyle?.textDecoration,
                               }}
                               onClick={() => handleTextClick(index)}
+                              onDoubleClick={() => handleTextDoubleClick(index)}
                             >
                               {line}
                             </div>
@@ -517,23 +525,23 @@ const SingleCardAdminEditor = ({ params }) => {
                         })}
 
                       {textStyle?.isSelected && (
-                        <button
-                          className="absolute bottom-[-40px] left-32 -mt-14 -mr-4 p-1 text-black bg-white rounded-full border border-gray-300 focus:outline-none z-30"
-                          onClick={(e) => handleTextDelete(e, index)}
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      )}
+                        <>
+                          <button
+                            className="absolute bottom-[-40px] left-2/3 -mt-14 -mr-2 p-1 text-black bg-white rounded-full border border-gray-300 focus:outline-none z-30 transform -translate-x-1/2"
+                            onClick={(e) => handleTextDelete(e, index)}
+                          >
+                            <Trash2 size={14} />
+                          </button>
 
-                      {textStyle?.isSelected && (
-                        <button
-                          className="absolute bottom-[-40px] left-20 -mt-14 -mr-4 p-1 text-black bg-white rounded-full border border-gray-300 focus:outline-none z-30"
-                          onMouseDown={(e) =>
-                            handleRotateMouseDown(e, selectedTextIndex)
-                          }
-                        >
-                          <RefreshCw size={14} />
-                        </button>
+                          <button
+                            className="absolute bottom-[-40px] left-1/3 -mt-14 -ml-2 p-1 text-black bg-white rounded-full border border-gray-300 focus:outline-none z-30 transform -translate-x-1/2"
+                            onMouseDown={(e) =>
+                              handleRotateMouseDown(e, selectedTextIndex)
+                            }
+                          >
+                            <RefreshCw size={14} />
+                          </button>
+                        </>
                       )}
                     </div>
                   </Draggable>
@@ -558,30 +566,68 @@ const SingleCardAdminEditor = ({ params }) => {
           </div>
         </div>
 
-        <h1 className="text-center text-3xl font-bold leading-5 mt-5">
+        <h1 className="text-center mb-24 text-3xl font-bold leading-5 mt-5">
           {imageData?.title}
         </h1>
-        {imageData && imageData?.imageType === "multiple image" && (
-          <div className="flex justify-center mt-4">
-            {imageData.images.map((image, index) => (
-              <div className="flex flex-col text-center mx-3" key={index}>
-                <Image
-                  width={0}
-                  height={0}
-                  key={image.id}
-                  src={image.watermark}
-                  alt={`Image ${image.id}`}
-                  className={`w-16 h-16 mx-1 cursor-pointer ${
-                    selectedImage === image.watermark
-                      ? "border-2 border-blue-500"
-                      : ""
-                  }`}
-                  onClick={() => handleImageClick(image.watermark)}
-                />
-                <p>Page {index + 1}</p>
-              </div>
-            ))}
-          </div>
+
+        {selectedTextIndex === null ? (
+          <BottomDefaultToolbar
+            handleSaveAndPreviewClick={handleSaveAndPreviewClick}
+            handleAddText={handleAddText}
+          />
+        ) : (
+          <BottomTextEditingToolbar
+            selectedTextIndex={selectedTextIndex}
+            showSlider={showSlider}
+            imageData={imageData}
+            selectedImageTextStyles={selectedImageTextStyles}
+            textStyles={textStyles}
+            handleFontSizeChange={handleFontSizeChange}
+            setShowModal={setShowModal}
+            handleSaveClick={handleSaveClick}
+            handleSaveToDatabase={handleSaveToDatabase}
+            handleAddText={handleAddText}
+            devtools={devtools}
+            handleLeftChange={handleLeftChange}
+            handleTopChange={handleTopChange}
+            handleTextAlignChange={handleTextAlignChange}
+            handleMoveToXAxisLeft={handleMoveToXAxisLeft}
+            handleMoveToXAxisRight={handleMoveToXAxisRight}
+            handleCenterText={handleCenterText}
+            handleMoveToYAxisTop={handleMoveToYAxisTop}
+            handleMoveToYAxisCenter={handleMoveToYAxisCenter}
+            handleMoveToYAxisBottom={handleMoveToYAxisBottom}
+            handleFontChange={handleFontChange}
+            lineHeight={lineHeight}
+            handleLineHeightChange={handleLineHeightChange}
+            letterSpacing={letterSpacing}
+            handleLetterSpacingChange={handleLetterSpacingChange}
+            setColorPickerVisible={setColorPickerVisible}
+            colorPickerVisible={colorPickerVisible}
+            handleFontColorChange={handleFontColorChange}
+            handleImageSizeAdjustment={handleImageSizeAdjustment}
+            widthAdjustment={widthAdjustment}
+            handleWidthAdjustment={handleWidthAdjustment}
+            heightAdjustment={heightAdjustment}
+            handleHeightAdjustment={handleHeightAdjustment}
+            handleUndo={handleUndo}
+            handleRedo={handleRedo}
+            handleSaveAndPreviewClick={handleSaveAndPreviewClick}
+            handleUppercase={handleUppercase}
+            handleLowercase={handleLowercase}
+            handleCapitalize={handleCapitalize}
+            toggleBold={toggleBold}
+            toggleItalic={toggleItalic}
+            toggleUnderline={toggleUnderline}
+            handleResizeMouseDown={handleResizeMouseDown}
+            handleMouseMove={handleMouseMove}
+            handleMouseUp={handleMouseUp}
+            rotationAngle={rotationAngle}
+            incrementFontSize={incrementFontSize}
+            decrementFontSize={decrementFontSize}
+            handleTextChange={handleTextChange}
+            handleUpdateButtonClick={handleUpdateButtonClick}
+          />
         )}
 
         {isPreviewModalOpen && (
@@ -590,8 +636,6 @@ const SingleCardAdminEditor = ({ params }) => {
 
         {isPreviewLoading && <LoadingOverlay message={"Preview is Loading"} />}
       </div>
-
-      {/* <Footer /> */}
     </>
   );
 };

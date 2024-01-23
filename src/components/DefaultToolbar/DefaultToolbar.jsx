@@ -28,7 +28,11 @@ import CenterText from "/public/svg/CenterText.svg";
 
 import EditTextIcon from "/public/svg/EditTextIcon.svg";
 
-const DefaultToolbar = ({ ...props }) => {
+const DefaultToolbar = ({
+  handleSaveAndPreviewClick,
+  handleAddText,
+  ...props
+}) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const hoverStyle = {
@@ -249,7 +253,10 @@ const DefaultToolbar = ({ ...props }) => {
         </div>
 
         <section className="inline-block ml-1 w-0.5 h-8 bg-[#DCDCDC] opacity-100 dark:opacity-50"></section>
-        <section className="flex flex-row items-center mr-2 ">
+        <section
+          className="flex flex-row items-center mr-2 "
+          onClick={() => handleAddText()}
+        >
           <div className="indicator">
             <span
               className="indicator-item indicator-bottom indicator-end badge badge-primary"
@@ -315,7 +322,10 @@ const DefaultToolbar = ({ ...props }) => {
           </div>
           <button className="inline-block ml-3 w-0.5 h-8 bg-[#DCDCDC] opacity-100 dark:opacity-50"></button>
         </section>
-        <button className="bg-[#23272A] w-full text-white px-4 py-2 rounded">
+        <button
+          className="bg-[#23272A] w-full text-white px-4 py-2 rounded"
+          onClick={() => handleSaveAndPreviewClick()}
+        >
           Save & Preview
         </button>
       </div>
