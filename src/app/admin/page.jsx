@@ -288,7 +288,7 @@ const SingleCardAdminEditor = ({ params }) => {
   return (
     <>
       {!isLoaded && <LoadingOverlay name="Editor is Opening" />}
-      <div className="flex flex-col items-center justify-center min-h-screen bg-[#EEEDED] text-[#23272A]">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#EEEDED] lg:bg-white  text-[#23272A]">
         <div
           id="canvas"
           className="my-5 hidden lg:block"
