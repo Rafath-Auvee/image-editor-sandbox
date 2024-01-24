@@ -516,7 +516,12 @@ const SingleCardAdminEditor = ({ params }) => {
                                 letterSpacing: adjustedLetterSpacing,
                                 textDecoration: textStyle?.textDecoration,
                               }}
-                              onClick={() => handleTextClick(index)}
+                              onClick={(event) => {
+                                handleTextClick(index, event);
+                              }}
+                              onTouchStart={(event) => {
+                                handleTextClick(index, event);
+                              }}
                               onDoubleClick={() => handleTextDoubleClick(index)}
                             >
                               {line}

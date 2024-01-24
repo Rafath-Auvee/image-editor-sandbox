@@ -524,7 +524,10 @@ const ImageEditorFunctions = ({ params, images }) => {
   //   }
   // };
 
-  const handleTextClick = (index) => {
+  const handleTextClick = (index, event) => {
+    // Prevent the default touch event behavior
+    event.preventDefault();
+
     const selectedTextStyle = textStyles[index];
     const lines = selectedTextStyle.text.split("\n");
     setTextStyles((prevTextStyles) => {
@@ -533,8 +536,8 @@ const ImageEditorFunctions = ({ params, images }) => {
         isSelected: index === i,
       }));
       setSelectedTextIndex(index);
-      setLineHeight(selectedTextStyle.lineHeight || 1.5); // Set initial line height from JSON or default to 1.5
-      setLetterSpacing(selectedTextStyle.letterSpacing || 0); // Set initial letter spacing from JSON or default to 0
+      setLineHeight(selectedTextStyle.lineHeight || 1.5);
+      setLetterSpacing(selectedTextStyle.letterSpacing || 0);
       return updatedTextStyles;
     });
   };
