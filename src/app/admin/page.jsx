@@ -418,21 +418,31 @@ const SingleCardAdminEditor = ({ params }) => {
                   textStyle.width * (canvasSize.width / 415);
                 const adjustedHeight =
                   textStyle.height * (canvasSize.height / 561);
-                const adjustedLeft = textStyle.left * (canvasSize.width / 415);
-                const adjustedTop = textStyle.top * (canvasSize.height / 561);
+                let adjustedLeft, adjustedTop;
+
+                if (window.innerWidth < 768) {
+                  // Mobile and tablet devices
+                  adjustedLeft = textStyle.left;
+                  adjustedTop = textStyle.top;
+                } else {
+                  // Desktop
+                  adjustedLeft = textStyle.left * (canvasSize.width / 415);
+                  adjustedTop = textStyle.top * (canvasSize.height / 561);
+                }
 
                 return (
                   <Draggable
                     key={index}
                     nodeRef={draggableRef}
                     position={{ x: adjustedLeft, y: adjustedTop }}
-                    onStop={(e, data) => handleTextDragStop(index, data)}
+                    onStop={(e, data) => handleTextDragStop(index, data, e)}
                     bounds={{
                       left: 0,
                       right: canvasSize.width,
                       top: 0,
                       bottom: canvasSize.height,
                     }}
+                    cancel=".no-drag"
                   >
                     <div
                       id={`textElement_${index}`}
@@ -460,19 +470,20 @@ const SingleCardAdminEditor = ({ params }) => {
                         // overflow: "hidden",
                       }}
                     >
-                      {textStyle.isSelected && (
-                        <>
-                          <div
-                            className="absolute bottom-0 right-0 -mb-2 z-30  -mr-4 p-1 bg-white rounded-full cursor-nwse-resize text-black"
-                            onMouseDown={(e) =>
-                              handleResizeMouseDown(e, index, "bottomRight")
-                            }
-                          >
-                            <TextResize size={15} />
-                          </div>
-                        </>
-                      )}
-
+                      <div className="no-drag">
+                        {textStyle.isSelected && (
+                          <>
+                            <div
+                              className="absolute bottom-0 right-0 -mb-2 z-30  -mr-4 p-1 bg-white rounded-full cursor-nwse-resize text-black"
+                              onMouseDown={(e) =>
+                                handleResizeMouseDown(e, index, "bottomRight")
+                              }
+                            >
+                              <TextResize size={15} />
+                            </div>
+                          </>
+                        )}
+                      </div>
                       {textStyle?.startingImage && ( // Check if the textStyle has an image property
                         <Image
                           src={textStyle?.startingImage}
