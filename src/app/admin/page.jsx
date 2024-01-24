@@ -33,6 +33,7 @@ import TextResize from "/public/svg/TextResize.svg";
 import { RefreshCw, Trash2 } from "lucide-react";
 import BottomDefaultToolbar from "@/components/BottomNavigation/BottomDefaultToolbar";
 import BottomTextEditingToolbar from "@/components/BottomNavigation/BottomTextEditingToolbar";
+import EditorTopBar from "@/components/EditorTopBar/EditorTopBar";
 
 const SingleCardAdminEditor = ({ params }) => {
   const draggableRef = useRef(null);
@@ -288,7 +289,15 @@ const SingleCardAdminEditor = ({ params }) => {
   return (
     <>
       {!isLoaded && <LoadingOverlay name="Editor is Opening" />}
-      <div className="flex flex-col items-center justify-center min-h-screen bg-[#EEEDED] lg:bg-white  text-[#23272A]">
+      <div className="block md:block lg:hidden pb-5 lg:pb-0">
+        <EditorTopBar
+          handleUndo={handleUndo}
+          handleRedo={handleRedo}
+          handleSaveToDatabase={handleSaveToDatabase}
+        />
+      </div>
+
+      <div className="flex flex-col items-center justify-center min-h-[90vh] bg-[#EEEDED] lg:bg-white  text-[#23272A]">
         <div
           id="canvas"
           className="my-5 hidden lg:block"
@@ -582,7 +591,7 @@ const SingleCardAdminEditor = ({ params }) => {
           </div>
         </div>
 
-        <h1 className="text-center mb-24 text-3xl font-bold leading-5 mt-5">
+        <h1 className="text-center mb-16 text-3xl font-bold leading-5 mt-5">
           {imageData?.title}
         </h1>
 
