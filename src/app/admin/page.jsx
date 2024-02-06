@@ -289,7 +289,7 @@ const SingleCardAdminEditor = ({ params }) => {
   return (
     <>
       {!isLoaded && <LoadingOverlay name="Editor is Opening" />}
-      <div className="block md:block lg:hidden pb-5 lg:pb-0">
+      <div className="block lg:hidden pb-5 lg:pb-0">
         <EditorTopBar
           handleUndo={handleUndo}
           handleRedo={handleRedo}
