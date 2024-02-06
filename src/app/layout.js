@@ -2,7 +2,7 @@ import { Poppins } from "next/font/google";
 import { Fraunces } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
-
+import "@uploadthing/react/styles.css";
 const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-fraunces" });
 
 const poppins = Poppins({

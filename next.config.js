@@ -6,7 +6,12 @@ const nextConfig = {
   // optimizeFonts: false, // Disable font optimization
   // minify: false, // Disable minification
   images: {
-    domains: ["res.cloudinary.com", "i.ibb.co"],
+    // domains: ["res.cloudinary.com", "i.ibb.co"],
+    remotePatterns: [
+      {
+        hostname: "utfs.io",
+      },
+    ],
   },
   webpack(config) {
     config.module.rules.push({

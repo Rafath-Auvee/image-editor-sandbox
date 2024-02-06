@@ -34,9 +34,70 @@ const FontSizeModal = ({
           </div>
           <div className="divider"></div>
           <div className="mx-4 my-2">
+            {/* <div className="flex flex-col w-full ">
+              <div className="flex justify-between h-10">
+                <div className="flex flex-row justify-between w-full">
+                  <p>Font Size</p>
+                </div>
+                <input
+                  type="text"
+                  min="5"
+                  value={
+                    imageData.imageType === "multiple image"
+                      ? selectedImageTextStyles[selectedTextIndex]?.fontSize
+                      : textStyles.length > selectedTextIndex
+                      ? textStyles[selectedTextIndex].fontSize
+                      : "20"
+                  }
+                  // readOnly
+                  onChange={(e) => handleFontSizeChange(selectedTextIndex, e)}
+                  className=" border-gray-300 rounded text-center"
+                  style={{
+                    width: "40px",
+                    height: "20px",
+                    textAlign: "center",
+                  }}
+                />
+              </div>
+              <input
+                type="range"
+                min="5"
+                value={
+                  imageData.imageType === "multiple image"
+                    ? selectedImageTextStyles[selectedTextIndex]?.fontSize
+                    : textStyles.length > selectedTextIndex
+                    ? textStyles[selectedTextIndex].fontSize
+                    : "20"
+                }
+                className="range range-xs"
+                onChange={(e) => handleFontSizeChange(selectedTextIndex, e)}
+                onInput={(e) => handleFontSizeChange(selectedTextIndex, e)}
+              />
+            </div> */}
+          </div>
+          <div className="mx-4 my-2">
             <div className="flex flex-col w-full ">
               <div className="flex flex-row justify-between w-full my-2">
                 <p>Font Size</p>
+                <input
+                  type="text"
+                  min="5"
+                  value={
+                    imageData.imageType === "multiple image"
+                      ? selectedImageTextStyles[selectedTextIndex]?.fontSize
+                      : textStyles.length > selectedTextIndex
+                      ? textStyles[selectedTextIndex].fontSize
+                      : "20"
+                  }
+                  // readOnly
+                  onChange={(e) => handleFontSizeChange(selectedTextIndex, e)}
+                  className=" border-gray-300 rounded text-center"
+                  style={{
+                    width: "40px",
+                    height: "20px",
+                    textAlign: "center",
+                  }}
+                />
               </div>
               <input
                 type="range"
@@ -54,7 +115,6 @@ const FontSizeModal = ({
               />
             </div>
           </div>
-          <div className="mx-4 my-2"></div>
         </div>
         <label className="modal-backdrop" htmlFor="FontSize">
           Close

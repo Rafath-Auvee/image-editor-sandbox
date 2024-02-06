@@ -40,7 +40,10 @@ const SpacingModal = ({
                 <input
                   type="text"
                   value={lineHeight}
-                  readOnly
+                  // readOnly
+                  onChange={(e) =>
+                    handleLineHeightChange(parseFloat(e.target.value))
+                  }
                   className=" border-gray-300 rounded text-center"
                   style={{
                     width: "40px",
@@ -53,7 +56,7 @@ const SpacingModal = ({
                 type="range"
                 min={0}
                 max="100"
-                readOnly
+                // readOnly
                 value={lineHeight}
                 className="range range-xs"
                 onChange={(e) =>
@@ -74,7 +77,10 @@ const SpacingModal = ({
                 <input
                   type="text"
                   value={letterSpacing}
-                  readOnly
+                  // readOnly
+                  onChange={(e) =>
+                    handleLetterSpacingChange(parseFloat(e.target.value))
+                  }
                   className=" border-gray-300 rounded text-center"
                   style={{
                     width: "40px",
@@ -87,7 +93,7 @@ const SpacingModal = ({
                 type="range"
                 min={0}
                 max="100"
-                readOnly
+                // readOnly
                 value={letterSpacing}
                 onChange={(e) =>
                   handleLetterSpacingChange(parseFloat(e.target.value))

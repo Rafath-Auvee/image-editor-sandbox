@@ -1,11 +1,10 @@
 "use client";
 import Draggable from "react-draggable";
-import ImageEditorFunctions from "@/components/ImageEditor/ImageEditorFunctions";
+import ImageEditorFunctions from "../components/ImageEditor/ImageEditorFunctions";
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { IoResize } from "react-icons/io5";
 // import images from "@/Data/Draft_Data";
-import { fonts } from "@/Data/Fonts_Data";
 import Edit from "/public/icons/editor/edit.svg";
 import Maximum from "/public/icons/editor/maximize.svg";
 // import PreviewModal from "@/components/PreviewModal/PreviewModal";
@@ -22,7 +21,7 @@ import {
   BiHorizontalCenter,
 } from "react-icons/bi";
 
-import LoadingOverlay from "@/components/LoadingOverlay/LoadingOverlay";
+import LoadingOverlay from "../components/LoadingOverlay/LoadingOverlay";
 
 import Undo from "/public/icons/undo.svg";
 import { CiEdit, CiRedo } from "react-icons/ci";

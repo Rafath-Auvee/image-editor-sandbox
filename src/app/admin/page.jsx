@@ -429,7 +429,8 @@ const SingleCardAdminEditor = ({ params }) => {
                   textStyle.height * (canvasSize.height / 561);
                 let adjustedLeft, adjustedTop;
 
-                if (window.innerWidth < 768) {
+                {
+                  /* if (window.innerWidth < 768) {
                   // Mobile and tablet devices
                   adjustedLeft = textStyle.left;
                   adjustedTop = textStyle.top;
@@ -437,7 +438,11 @@ const SingleCardAdminEditor = ({ params }) => {
                   // Desktop
                   adjustedLeft = textStyle.left * (canvasSize.width / 415);
                   adjustedTop = textStyle.top * (canvasSize.height / 561);
+                } */
                 }
+
+                adjustedLeft = textStyle.left * (canvasSize.width / 415);
+                adjustedTop = textStyle.top * (canvasSize.height / 561);
 
                 return (
                   <Draggable
