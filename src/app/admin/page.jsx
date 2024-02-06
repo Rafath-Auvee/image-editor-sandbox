@@ -431,7 +431,7 @@ const SingleCardAdminEditor = ({ params }) => {
 
                 {
                   /* if (window.innerWidth < 768) {
-                  // Mobile and tablet devices
+
                   adjustedLeft = textStyle.left;
                   adjustedTop = textStyle.top;
                 } else {
