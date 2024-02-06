@@ -448,7 +448,7 @@ const SingleCardAdminEditor = ({ params }) => {
                   <Draggable
                     key={index}
                     nodeRef={draggableRef}
-                    position={{ x: adjustedLeft, y: adjustedTop }}
+                    position={{ x: textStyle.left, y: textStyle.top }}
                     onStop={(e, data) => handleTextDragStop(index, data, e)}
                     bounds={{
                       left: 0,
