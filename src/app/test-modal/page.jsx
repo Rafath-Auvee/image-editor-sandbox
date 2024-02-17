@@ -4,7 +4,7 @@ import EditText from "/public/BottomNavigation/EditText.svg";
 import BottomDefaultToolbar from "@/components/BottomNavigation/BottomDefaultToolbar";
 import ImageEditorFunctions from "@/components/ImageEditor/ImageEditorFunctions";
 
-const TestModal = () => {
+const TestModal = ({ params }) => {
   const { handleSaveAndPreviewClick, handleAddText } = ImageEditorFunctions({
     params,
   });
