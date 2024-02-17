@@ -2,8 +2,10 @@ import React from "react";
 import { X } from "lucide-react";
 import EditText from "/public/BottomNavigation/EditText.svg";
 import BottomDefaultToolbar from "@/components/BottomNavigation/BottomDefaultToolbar";
+import ImageEditorFunctions from "@/components/ImageEditor/ImageEditorFunctions";
 
 const TestModal = () => {
+  const { handleSaveAndPreviewClick, handleAddText } = ImageEditorFunctions();
   return (
     <div>
       <BottomDefaultToolbar
