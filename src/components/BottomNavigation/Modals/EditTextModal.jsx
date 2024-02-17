@@ -18,7 +18,7 @@ const EditTextModal = ({
         <span className="btm-nav-label font-thin">Edit Text</span>
       </label>
       <input type="checkbox" id="EditTextModal" className="modal-toggle" />
-      <div className="modal modal-bottom  " role="dialog">
+      <div className="modal modal-bottom  z-[1000] " role="dialog">
         <div className="modal-box min-w-full">
           <div className="flex justify-end h-6">
             <p className="w-full text-black font-bold text-1xl text-center">
