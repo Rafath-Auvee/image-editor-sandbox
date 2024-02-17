@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { X } from "lucide-react";
 import EditText from "/public/BottomNavigation/EditText.svg";
