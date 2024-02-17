@@ -36,7 +36,7 @@ const AlignmentModal = ({
           <span className="btm-nav-label font-thin">Alignment</span>
         </label>
         <input type="checkbox" id="AlignmentModal" className="modal-toggle" />
-        <div className="modal modal-bottom  " role="dialog">
+        <div className="modal modal-bottom z-[1000] " role="dialog">
           <div className="modal-box min-w-full">
             <div className="flex justify-between h-6">
               <p className="w-full text-black font-bold text-1xl text-center">
