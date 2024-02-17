@@ -11,7 +11,7 @@ const TestModal = ({ params }) => {
   });
   return (
     <div>
-      <BottomDefaultToolbar
+      {/* <BottomDefaultToolbar
         style={{
           zIndex: 1000,
           position: "fixed",
@@ -21,7 +21,7 @@ const TestModal = ({ params }) => {
         }}
         handleSaveAndPreviewClick={handleSaveAndPreviewClick}
         handleAddText={handleAddText}
-      />
+      /> */}
     </div>
   );
 };
