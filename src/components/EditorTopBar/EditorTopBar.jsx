@@ -4,7 +4,7 @@ import BackButton from "/public/BottomNavigation/BackButton.svg";
 const EditorTopBar = ({ handleUndo, handleRedo, handleSaveToDatabase }) => {
   return (
     <div>
-      <div className="navbar fixed  bg-white text-black px-4 ">
+      <div className="navbar   bg-white text-black px-4 ">
         <div className="navbar-start flex flex-row gap-x-5">
           <BackButton />
 

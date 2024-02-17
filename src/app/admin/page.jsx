@@ -284,16 +284,40 @@ const SingleCardAdminEditor = ({ params }) => {
     };
   }, []);
 
+  const [adjustedStyles, setAdjustedStyles] = useState([]);
+
+  useEffect(() => {
+    const updateAdjustedStyles = () => {
+      const updatedStyles = textStyles.map((style) => {
+        return {
+          adjustedLeft: style.left * (canvasSize.width / 415),
+          adjustedTop: style.top * (canvasSize.height / 561),
+        };
+      });
+      setAdjustedStyles(updatedStyles);
+    };
+
+    updateAdjustedStyles();
+  }, [canvasSize, textStyles]);
+
   const [imageSizeAdjustment, setImageSizeAdjustment] = useState(100); // Initial value
+  const [isEditingText, setIsEditingText] = useState(false);
+  const [editedTextIndex, setEditedTextIndex] = useState(null);
+
+  const handleTextDoubleClick = (index) => {
+    setEditedTextIndex(index);
+    setIsEditingText(true);
+    setShowModal(true);
+  };
 
   return (
     <>
       {!isLoaded && <LoadingOverlay name="Editor is Opening" />}
-      <div className="block lg:hidden pb-5 lg:pb-0">
+      <div className="visible lg:hidden pb-5 lg:pb-0">
         <EditorTopBar
           handleUndo={handleUndo}
           handleRedo={handleRedo}
-          handleSaveToDatabase={handleSaveToDatabase}
+          handleSaveToDatabase={handleSaveAndPreviewClick}
         />
       </div>
 
@@ -427,28 +451,31 @@ const SingleCardAdminEditor = ({ params }) => {
                   textStyle.width * (canvasSize.width / 415);
                 const adjustedHeight =
                   textStyle.height * (canvasSize.height / 561);
-                let adjustedLeft, adjustedTop;
 
-                {
-                  /* if (window.innerWidth < 768) {
-
-                  adjustedLeft = textStyle.left;
-                  adjustedTop = textStyle.top;
-                } else {
-                  // Desktop
-                  adjustedLeft = textStyle.left * (canvasSize.width / 415);
-                  adjustedTop = textStyle.top * (canvasSize.height / 561);
-                } */
-                }
-
-                adjustedLeft = textStyle.left * (canvasSize.width / 415);
-                adjustedTop = textStyle.top * (canvasSize.height / 561);
+                const adjustedStyle = adjustedStyles[index];
+                if (!adjustedStyle) return null; // Add this line to handle undefined adjustedStyle
+                const { adjustedLeft, adjustedTop } = adjustedStyle;
 
                 return (
                   <Draggable
                     key={index}
                     nodeRef={draggableRef}
-                    position={{ x: textStyle.left, y: textStyle.top }}
+                    defaultPosition={{ x: adjustedLeft, y: adjustedTop }}
+                    position={
+                      textStyle.isSelected
+                        ? { x: textStyle.left, y: textStyle.top }
+                        : null
+                    }
+                    onStart={() => {
+                      // Check if defaultPosition has been applied
+                      if (draggableRef.current.style.transform === "") {
+                        // If not, set the position based on current state or props
+                        const { x, y } = textStyle.isSelected
+                          ? { x: textStyle.left, y: textStyle.top }
+                          : { x: adjustedLeft, y: adjustedTop };
+                        draggableRef.current.style.transform = `translate(${x}px, ${y}px)`;
+                      }
+                    }}
                     onStop={(e, data) => handleTextDragStop(index, data, e)}
                     bounds={{
                       left: 0,
@@ -457,6 +484,9 @@ const SingleCardAdminEditor = ({ params }) => {
                       bottom: canvasSize.height,
                     }}
                     cancel=".no-drag"
+                    // Add touchAction and userSelect props
+                    touchAction="none" // Prevent default touch actions like scrolling
+                    userSelect="none" // Disable text selection during drag
                   >
                     <div
                       id={`textElement_${index}`}
@@ -515,6 +545,9 @@ const SingleCardAdminEditor = ({ params }) => {
                             backgroundColor: "none",
                           }}
                           onClick={() => handleTextStyleImage(index)}
+                          onTouchStart={(event) => {
+                            handleTextStyleImage(index);
+                          }}
                           // onLoad={() => console.log("Image loaded successfully!")}
                         />
                       )}
@@ -580,7 +613,7 @@ const SingleCardAdminEditor = ({ params }) => {
             </>
           )}
           <div
-            className="border mx-auto" // Center the canvas using mx-auto (margin auto) class
+            className="border mx-auto"
             style={{
               width: canvasSize.width,
               height: canvasSize.height,
@@ -600,13 +633,35 @@ const SingleCardAdminEditor = ({ params }) => {
           {imageData?.title}
         </h1>
 
+        {isPreviewModalOpen && (
+          <PreviewModal previewData={previewData} onClose={closePreviewModal} />
+        )}
+
+        {isPreviewLoading && <LoadingOverlay message={"Preview is Loading"} />}
+      </div>
+
+      <div className="visible lg:hidden ">
         {selectedTextIndex === null ? (
           <BottomDefaultToolbar
+            style={{
+              zIndex: 1000,
+              position: "fixed",
+              bottom: 0,
+              left: 0,
+              right: 0,
+            }}
             handleSaveAndPreviewClick={handleSaveAndPreviewClick}
             handleAddText={handleAddText}
           />
         ) : (
           <BottomTextEditingToolbar
+            style={{
+              zIndex: 1000,
+              position: "fixed",
+              bottom: 0,
+              left: 0,
+              right: 0,
+            }}
             selectedTextIndex={selectedTextIndex}
             showSlider={showSlider}
             imageData={imageData}
@@ -659,12 +714,6 @@ const SingleCardAdminEditor = ({ params }) => {
             handleUpdateButtonClick={handleUpdateButtonClick}
           />
         )}
-
-        {isPreviewModalOpen && (
-          <PreviewModal previewData={previewData} onClose={closePreviewModal} />
-        )}
-
-        {isPreviewLoading && <LoadingOverlay message={"Preview is Loading"} />}
       </div>
     </>
   );
