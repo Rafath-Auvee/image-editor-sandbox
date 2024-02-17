@@ -321,6 +321,85 @@ const SingleCardAdminEditor = ({ params }) => {
         />
       </div>
 
+      <div
+        className="visible lg:hidden "
+        style={{ position: "absolute", zIndex: 999 }}
+      >
+        {selectedTextIndex === null ? (
+          <BottomDefaultToolbar
+            style={{
+              zIndex: 1000,
+              position: "fixed",
+              bottom: 0,
+              left: 0,
+              right: 0,
+            }}
+            handleSaveAndPreviewClick={handleSaveAndPreviewClick}
+            handleAddText={handleAddText}
+          />
+        ) : (
+          <BottomTextEditingToolbar
+            style={{
+              zIndex: 1000,
+              position: "fixed",
+              bottom: 0,
+              left: 0,
+              right: 0,
+            }}
+            selectedTextIndex={selectedTextIndex}
+            showSlider={showSlider}
+            imageData={imageData}
+            selectedImageTextStyles={selectedImageTextStyles}
+            textStyles={textStyles}
+            handleFontSizeChange={handleFontSizeChange}
+            setShowModal={setShowModal}
+            handleSaveClick={handleSaveClick}
+            handleSaveToDatabase={handleSaveToDatabase}
+            handleAddText={handleAddText}
+            devtools={devtools}
+            handleLeftChange={handleLeftChange}
+            handleTopChange={handleTopChange}
+            handleTextAlignChange={handleTextAlignChange}
+            handleMoveToXAxisLeft={handleMoveToXAxisLeft}
+            handleMoveToXAxisRight={handleMoveToXAxisRight}
+            handleCenterText={handleCenterText}
+            handleMoveToYAxisTop={handleMoveToYAxisTop}
+            handleMoveToYAxisCenter={handleMoveToYAxisCenter}
+            handleMoveToYAxisBottom={handleMoveToYAxisBottom}
+            handleFontChange={handleFontChange}
+            lineHeight={lineHeight}
+            handleLineHeightChange={handleLineHeightChange}
+            letterSpacing={letterSpacing}
+            handleLetterSpacingChange={handleLetterSpacingChange}
+            setColorPickerVisible={setColorPickerVisible}
+            colorPickerVisible={colorPickerVisible}
+            handleFontColorChange={handleFontColorChange}
+            handleImageSizeAdjustment={handleImageSizeAdjustment}
+            widthAdjustment={widthAdjustment}
+            handleWidthAdjustment={handleWidthAdjustment}
+            heightAdjustment={heightAdjustment}
+            handleHeightAdjustment={handleHeightAdjustment}
+            handleUndo={handleUndo}
+            handleRedo={handleRedo}
+            handleSaveAndPreviewClick={handleSaveAndPreviewClick}
+            handleUppercase={handleUppercase}
+            handleLowercase={handleLowercase}
+            handleCapitalize={handleCapitalize}
+            toggleBold={toggleBold}
+            toggleItalic={toggleItalic}
+            toggleUnderline={toggleUnderline}
+            handleResizeMouseDown={handleResizeMouseDown}
+            handleMouseMove={handleMouseMove}
+            handleMouseUp={handleMouseUp}
+            rotationAngle={rotationAngle}
+            incrementFontSize={incrementFontSize}
+            decrementFontSize={decrementFontSize}
+            handleTextChange={handleTextChange}
+            handleUpdateButtonClick={handleUpdateButtonClick}
+          />
+        )}
+      </div>
+
       <div className="flex flex-col items-center justify-center min-h-[90vh] bg-[#EEEDED] lg:bg-white  text-[#23272A]">
         <div
           id="canvas"
@@ -638,82 +717,6 @@ const SingleCardAdminEditor = ({ params }) => {
         )}
 
         {isPreviewLoading && <LoadingOverlay message={"Preview is Loading"} />}
-      </div>
-
-      <div className="visible lg:hidden ">
-        {selectedTextIndex === null ? (
-          <BottomDefaultToolbar
-            style={{
-              zIndex: 1000,
-              position: "fixed",
-              bottom: 0,
-              left: 0,
-              right: 0,
-            }}
-            handleSaveAndPreviewClick={handleSaveAndPreviewClick}
-            handleAddText={handleAddText}
-          />
-        ) : (
-          <BottomTextEditingToolbar
-            style={{
-              zIndex: 1000,
-              position: "fixed",
-              bottom: 0,
-              left: 0,
-              right: 0,
-            }}
-            selectedTextIndex={selectedTextIndex}
-            showSlider={showSlider}
-            imageData={imageData}
-            selectedImageTextStyles={selectedImageTextStyles}
-            textStyles={textStyles}
-            handleFontSizeChange={handleFontSizeChange}
-            setShowModal={setShowModal}
-            handleSaveClick={handleSaveClick}
-            handleSaveToDatabase={handleSaveToDatabase}
-            handleAddText={handleAddText}
-            devtools={devtools}
-            handleLeftChange={handleLeftChange}
-            handleTopChange={handleTopChange}
-            handleTextAlignChange={handleTextAlignChange}
-            handleMoveToXAxisLeft={handleMoveToXAxisLeft}
-            handleMoveToXAxisRight={handleMoveToXAxisRight}
-            handleCenterText={handleCenterText}
-            handleMoveToYAxisTop={handleMoveToYAxisTop}
-            handleMoveToYAxisCenter={handleMoveToYAxisCenter}
-            handleMoveToYAxisBottom={handleMoveToYAxisBottom}
-            handleFontChange={handleFontChange}
-            lineHeight={lineHeight}
-            handleLineHeightChange={handleLineHeightChange}
-            letterSpacing={letterSpacing}
-            handleLetterSpacingChange={handleLetterSpacingChange}
-            setColorPickerVisible={setColorPickerVisible}
-            colorPickerVisible={colorPickerVisible}
-            handleFontColorChange={handleFontColorChange}
-            handleImageSizeAdjustment={handleImageSizeAdjustment}
-            widthAdjustment={widthAdjustment}
-            handleWidthAdjustment={handleWidthAdjustment}
-            heightAdjustment={heightAdjustment}
-            handleHeightAdjustment={handleHeightAdjustment}
-            handleUndo={handleUndo}
-            handleRedo={handleRedo}
-            handleSaveAndPreviewClick={handleSaveAndPreviewClick}
-            handleUppercase={handleUppercase}
-            handleLowercase={handleLowercase}
-            handleCapitalize={handleCapitalize}
-            toggleBold={toggleBold}
-            toggleItalic={toggleItalic}
-            toggleUnderline={toggleUnderline}
-            handleResizeMouseDown={handleResizeMouseDown}
-            handleMouseMove={handleMouseMove}
-            handleMouseUp={handleMouseUp}
-            rotationAngle={rotationAngle}
-            incrementFontSize={incrementFontSize}
-            decrementFontSize={decrementFontSize}
-            handleTextChange={handleTextChange}
-            handleUpdateButtonClick={handleUpdateButtonClick}
-          />
-        )}
       </div>
     </>
   );
