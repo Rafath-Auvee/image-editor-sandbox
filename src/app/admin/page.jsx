@@ -400,7 +400,10 @@ const SingleCardAdminEditor = ({ params }) => {
         )}
       </div>
 
-      <div className="flex flex-col items-center justify-center min-h-[90vh] bg-[#EEEDED] lg:bg-white  text-[#23272A]">
+      <div
+        className="flex flex-col items-center justify-center min-h-[90vh] bg-[#EEEDED] lg:bg-white  text-[#23272A] "
+        style={{ zIndex: 1 }}
+      >
         <div
           id="canvas"
           className="my-5 hidden lg:block"
