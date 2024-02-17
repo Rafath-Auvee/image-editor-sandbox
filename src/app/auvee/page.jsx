@@ -143,11 +143,14 @@ const SingleCardAdminEditor = ({ params }) => {
     const canvas = canvasRef.current;
     if (!canvas) {
       console.error("Canvas element is not available.");
+      setIsLoaded(false); // Set isLoaded to false to indicate that the canvas is not available
       return;
     }
+
     const context = canvas.getContext("2d");
     if (!context) {
       console.error("Failed to getContext from canvas element.");
+      setIsLoaded(false); // Set isLoaded to false if getContext fails
       return;
     }
     textStylesRef.current = textStyles;
@@ -319,7 +322,7 @@ const SingleCardAdminEditor = ({ params }) => {
 
   return (
     <>
-      {!isLoaded && <LoadingOverlay name="Editor is Opening" />}
+      {/* {!isLoaded && <LoadingOverlay name="Editor is Opening" />} */}
       <div className="visible lg:hidden pb-5 lg:pb-0">
         <EditorTopBar
           handleUndo={handleUndo}
@@ -530,9 +533,9 @@ const SingleCardAdminEditor = ({ params }) => {
               <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
             </>
           ) : null}
-        </div> */}
+        </div>
 
-        {/* <div className="relative">
+        <div className="relative">
           {isLoaded && (
             <>
               {textStyles.map((textStyle, index) => {
@@ -718,9 +721,9 @@ const SingleCardAdminEditor = ({ params }) => {
           </div>
         </div> */}
 
-        {/* <h1 className="text-center mb-16 text-3xl font-bold leading-5 mt-5">
+        <h1 className="text-center mb-16 text-3xl font-bold leading-5 mt-5">
           {imageData?.title}
-        </h1> */}
+        </h1>
 
         {isPreviewModalOpen && (
           <PreviewModal previewData={previewData} onClose={closePreviewModal} />
