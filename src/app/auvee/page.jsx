@@ -411,7 +411,7 @@ const SingleCardAdminEditor = ({ params }) => {
         className="flex flex-col items-center justify-center min-h-[90vh] bg-[#EEEDED] lg:bg-white  text-[#23272A] "
         style={{ zIndex: 1 }}
       >
-        <div
+        {/* <div
           id="canvas"
           className="my-5 hidden lg:block"
           onClick={handleCanvasClick}
@@ -530,9 +530,9 @@ const SingleCardAdminEditor = ({ params }) => {
               <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
             </>
           ) : null}
-        </div>
+        </div> */}
 
-        <div className="relative">
+        {/* <div className="relative">
           {isLoaded && (
             <>
               {textStyles.map((textStyle, index) => {
@@ -701,7 +701,7 @@ const SingleCardAdminEditor = ({ params }) => {
               })}
             </>
           )}
-          {/* <div
+          <div
             className="border mx-auto"
             style={{
               width: canvasSize.width,
@@ -715,8 +715,8 @@ const SingleCardAdminEditor = ({ params }) => {
               height={canvasSize.height}
               onMouseMove={handleCanvasMouseMove}
             ></canvas>
-          </div> */}
-        </div>
+          </div>
+        </div> */}
 
         {/* <h1 className="text-center mb-16 text-3xl font-bold leading-5 mt-5">
           {imageData?.title}
