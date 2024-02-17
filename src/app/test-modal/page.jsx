@@ -5,7 +5,9 @@ import BottomDefaultToolbar from "@/components/BottomNavigation/BottomDefaultToo
 import ImageEditorFunctions from "@/components/ImageEditor/ImageEditorFunctions";
 
 const TestModal = () => {
-  const { handleSaveAndPreviewClick, handleAddText } = ImageEditorFunctions();
+  const { handleSaveAndPreviewClick, handleAddText } = ImageEditorFunctions({
+    params,
+  });
   return (
     <div>
       <BottomDefaultToolbar
