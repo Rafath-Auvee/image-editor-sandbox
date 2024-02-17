@@ -323,13 +323,13 @@ const SingleCardAdminEditor = ({ params }) => {
   return (
     <>
       {/* {!isLoaded && <LoadingOverlay name="Editor is Opening" />} */}
-      <div className="visible lg:hidden pb-5 lg:pb-0">
+      {/* <div className="visible lg:hidden pb-5 lg:pb-0">
         <EditorTopBar
           handleUndo={handleUndo}
           handleRedo={handleRedo}
           handleSaveToDatabase={handleSaveAndPreviewClick}
         />
-      </div>
+      </div> */}
 
       <div
         className="visible lg:hidden "

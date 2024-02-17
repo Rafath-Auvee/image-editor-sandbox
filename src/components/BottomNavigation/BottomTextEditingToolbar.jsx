@@ -68,8 +68,15 @@ const BottomTextEditingToolbar = ({
 }) => {
   return (
     <>
-      <div className="block lg:hidden" key={props.selectedTextIndex}>
-        <div className="btm-nav btm-nav-sm flex overflow-x-auto content-start justify-start h-20">
+      <div
+        className="visible lg:hidden"
+        key={props.selectedTextIndex}
+        style={{ position: "absolute", zIndex: 999 }}
+      >
+        <div
+          className="btm-nav btm-nav-sm flex overflow-x-auto content-start justify-start h-20"
+          style={{ position: "absolute", zIndex: 999 }}
+        >
           <button className="min-w-[16.7%]" onClick={() => handleAddText()}>
             <AddText className="h-5 w-5" />
             <span className="btm-nav-label font-thin">Add Text</span>
