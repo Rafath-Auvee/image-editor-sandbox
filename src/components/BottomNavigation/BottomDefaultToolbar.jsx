@@ -7,6 +7,7 @@ import FontSizeBottom from "/public/BottomNavigation/FontSizeBottom.svg";
 import FontColorBottom from "/public/BottomNavigation/FontColorBottom.svg";
 import Alignment from "/public/BottomNavigation/Alignment.svg";
 import Spacing from "/public/BottomNavigation/Spacing.svg";
+import TestModal from "@/app/test-modal/page";
 
 const BottomDefaultToolbar = ({
   handleSaveAndPreviewClick,
@@ -22,8 +23,7 @@ const BottomDefaultToolbar = ({
             <span className="btm-nav-label font-thin">Add Text</span>
           </button>
           <button className="min-w-[16.7%]">
-            <EditText />
-            <span className="btm-nav-label font-thin">Edit Text</span>
+            <TestModal />
           </button>
           <button className="min-w-[16.7%]">
             <FontSelection />

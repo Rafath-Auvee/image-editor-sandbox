@@ -141,6 +141,11 @@ const SingleCardAdminEditor = ({ params }) => {
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    if (!canvas) {
+      // Handle null canvas element here
+      return;
+    }
+
     const context = canvas.getContext("2d");
 
     textStylesRef.current = textStyles;
@@ -525,7 +530,7 @@ const SingleCardAdminEditor = ({ params }) => {
           ) : null}
         </div>
 
-        <div className="relative">
+        {/* <div className="relative">
           {isLoaded && (
             <>
               {textStyles.map((textStyle, index) => {
@@ -700,20 +705,20 @@ const SingleCardAdminEditor = ({ params }) => {
               width: canvasSize.width,
               height: canvasSize.height,
             }}
-          >
-            <canvas
-              ref={canvasRef}
-              className="w-full h-full"
-              width={canvasSize.width}
-              height={canvasSize.height}
-              onMouseMove={handleCanvasMouseMove}
-            ></canvas>
-          </div>
-        </div>
+          > */}
+        <canvas
+          ref={canvasRef}
+          className="w-full h-full"
+          width={canvasSize.width}
+          height={canvasSize.height}
+          onMouseMove={handleCanvasMouseMove}
+        ></canvas>
+        {/* </div>
+        </div> */}
 
-        <h1 className="text-center mb-16 text-3xl font-bold leading-5 mt-5">
+        {/* <h1 className="text-center mb-16 text-3xl font-bold leading-5 mt-5">
           {imageData?.title}
-        </h1>
+        </h1> */}
 
         {isPreviewModalOpen && (
           <PreviewModal previewData={previewData} onClose={closePreviewModal} />
