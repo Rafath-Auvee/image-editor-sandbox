@@ -1,29 +1,65 @@
-"use client";
-import React from "react";
-import { X } from "lucide-react";
-import EditText from "/public/BottomNavigation/EditText.svg";
-import BottomDefaultToolbar from "@/components/BottomNavigation/BottomDefaultToolbar";
-import ImageEditorFunctions from "@/components/ImageEditor/ImageEditorFunctions";
+import Image from "next/image";
+import React, { useEffect } from "react";
 
-const TestModal = ({ params }) => {
-  const { handleSaveAndPreviewClick, handleAddText } = ImageEditorFunctions({
-    params,
-  });
+const ServiceModal = ({ closeModal }) => {
+  useEffect(() => {
+    const handleCloseModal = (event) => {
+      const clickedElement = event.target;
+      if (clickedElement && clickedElement.classList.contains("bgGlass")) {
+        closeModal();
+      }
+    };
+    document.addEventListener("mousedown", handleCloseModal);
+    return () => {
+      document.removeEventListener("mousedown", handleCloseModal);
+    };
+  }, [closeModal]);
+  console.log("Hello Fuad Loves Maisha");
   return (
     <div>
-      {/* <BottomDefaultToolbar
-        style={{
-          zIndex: 1000,
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-        }}
-        handleSaveAndPreviewClick={handleSaveAndPreviewClick}
-        handleAddText={handleAddText}
-      /> */}
+      <style jsx>
+        {`
+          .servicebox {
+            background: linear-gradient(138deg, #1010ff 40%, #2f2c2c 68%);
+            transition: 1s;
+          }
+        `}
+      </style>
+      <input type="checkbox" id="my-modal-6" className="modal-toggle" />
+      <div className="z-[1000] modal modal-bottom sm:modal-middle cursor-pointer bgGlass">
+        <div
+          className="modal-box max-h-[50%] rounded-none bg-blue-500 p-0"
+          style={{
+            borderBottomLeftRadius: "0px",
+            borderBottomRightRadius: "0px",
+          }}
+        >
+          <label
+            htmlFor="my-modal-6"
+            className="btn btn-sm btn-circle right-2 top-2 absolute"
+            onClick={onclose}
+          >
+            ✕
+          </label>
+          <div className="  m-[5%] bg-base-100 text-black">
+            {/* <Image
+              src={service.img}
+              className="min-w-sm rounded-lg w-full  mx-auto "
+              alt=""
+              width={300}
+              height={251}
+            /> */}
+            <h1 className="text-sm font-bold my-[2%] text-center">
+              service.name
+            </h1>
+            <p className="text-xs md:text-sm leading-snug ">
+              service.description && service.description
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default TestModal;
+export default ServiceModal;

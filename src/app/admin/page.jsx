@@ -331,25 +331,11 @@ const SingleCardAdminEditor = ({ params }) => {
       >
         {selectedTextIndex === null ? (
           <BottomDefaultToolbar
-            style={{
-              zIndex: 1000,
-              position: "fixed",
-              bottom: 0,
-              left: 0,
-              right: 0,
-            }}
             handleSaveAndPreviewClick={handleSaveAndPreviewClick}
             handleAddText={handleAddText}
           />
         ) : (
           <BottomTextEditingToolbar
-            style={{
-              zIndex: 1000,
-              position: "fixed",
-              bottom: 0,
-              left: 0,
-              right: 0,
-            }}
             selectedTextIndex={selectedTextIndex}
             showSlider={showSlider}
             imageData={imageData}

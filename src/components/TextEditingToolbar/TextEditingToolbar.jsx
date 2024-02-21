@@ -101,8 +101,8 @@ const TextEditingToolbar = ({
           <option disabled defaultValue={"Font Name"} readOnly>
             Font Name?
           </option>
-          {fonts.map((font) => (
-            <option key={font.id} value={font.name}>
+          {fonts.map((font, index) => (
+            <option key={index} value={font.name}>
               {font.name}
             </option>
           ))}

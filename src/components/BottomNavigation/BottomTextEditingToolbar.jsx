@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import AddText from "/public/BottomNavigation/AddText.svg";
 import EditText from "/public/BottomNavigation/EditText.svg";
 import FontSelection from "/public/BottomNavigation/FontSelection.svg";
@@ -12,6 +12,7 @@ import FontSizeModal from "./Modals/FontSizeModal";
 import FontSelectionModal from "./Modals/FontSelectionModal";
 import { fonts } from "@/Data/Fonts_Data";
 import EditTextModal from "./Modals/EditTextModal";
+import ServiceModal from "@/app/test-modal/page";
 
 const BottomTextEditingToolbar = ({
   selectedTextIndex,
@@ -66,21 +67,35 @@ const BottomTextEditingToolbar = ({
   handleUpdateButtonClick,
   ...props
 }) => {
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const toggleModal = () => {
+    console.log(modalOpen);
+    setModalOpen(!modalOpen);
+  };
   return (
     <>
       <div
         className="visible lg:hidden"
         key={props.selectedTextIndex}
-        style={{ position: "absolute", zIndex: 999 }}
+        // style={{ position: "absolute", zIndex: 999 }}
       >
         <div
           className="btm-nav btm-nav-sm flex overflow-x-auto content-start justify-start h-20"
-          style={{ position: "absolute", zIndex: 999 }}
+          // style={{ position: "absolute", zIndex: 999 }}
         >
           <button className="min-w-[16.7%]" onClick={() => handleAddText()}>
             <AddText className="h-5 w-5" />
             <span className="btm-nav-label font-thin">Add Text</span>
           </button>
+
+          <button
+            onClick={() => toggleModal()}
+            className="text-black toggle-button"
+          >
+            Toggle
+          </button>
+          {modalOpen && <ServiceModal closeModal={toggleModal} />}
           <button className="min-w-[16.7%]">
             <EditTextModal
               handleTextChange={handleTextChange}

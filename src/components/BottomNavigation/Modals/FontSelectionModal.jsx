@@ -58,9 +58,9 @@ const FontSelectionModal = ({
             }`}
           >
             <ul className="dropdown-list">
-              {fonts.map((font) => (
+              {fonts.map((font, index) => (
                 <li
-                  key={font.id}
+                  key={index}
                   className="dropdown-item text-3xl font-bold capitalize"
                   onClick={() => handleFontSelect(font.name)}
                 >
