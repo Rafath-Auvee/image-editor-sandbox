@@ -7,7 +7,7 @@ import FontSizeBottom from "/public/BottomNavigation/FontSizeBottom.svg";
 import FontColorBottom from "/public/BottomNavigation/FontColorBottom.svg";
 import Alignment from "/public/BottomNavigation/Alignment.svg";
 import Spacing from "/public/BottomNavigation/Spacing.svg";
-import ServiceModal from "@/app/test-modal/page";
+import ServiceModal from "../ModalForTextEdit/TastyModal";
 
 const BottomDefaultToolbar = ({
   handleSaveAndPreviewClick,

@@ -12,7 +12,7 @@ import FontSizeModal from "./Modals/FontSizeModal";
 import FontSelectionModal from "./Modals/FontSelectionModal";
 import { fonts } from "@/Data/Fonts_Data";
 import EditTextModal from "./Modals/EditTextModal";
-import ServiceModal from "@/app/test-modal/page";
+import ServiceModal from "../ModalForTextEdit/TastyModal";
 
 const BottomTextEditingToolbar = ({
   selectedTextIndex,
@@ -89,12 +89,13 @@ const BottomTextEditingToolbar = ({
             <span className="btm-nav-label font-thin">Add Text</span>
           </button>
 
-          <button
+          <label
+                htmlFor="my-modal-6"
             onClick={() => toggleModal()}
             className="text-black toggle-button"
           >
             Toggle
-          </button>
+          </label>
           {modalOpen && <ServiceModal closeModal={toggleModal} />}
           <button className="min-w-[16.7%]">
             <EditTextModal
