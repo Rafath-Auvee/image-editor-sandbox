@@ -109,8 +109,8 @@ const BottomTextEditingToolbar = ({
         // style={{ position: "absolute", zIndex: 999 }}
       >
         <div
-          className="btm-nav btm-nav-sm flex overflow-x-auto content-start justify-start h-20"
-          // style={{ position: "absolute", zIndex: 999 }}
+        // className="btm-nav btm-nav-sm flex overflow-x-auto content-start justify-start h-20"
+        // style={{ position: "absolute", zIndex: 999 }}
         >
           <button className="min-w-[16.7%]" onClick={() => handleAddText()}>
             <AddText className="h-5 w-5" />
