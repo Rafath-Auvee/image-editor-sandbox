@@ -666,69 +666,69 @@ const SingleCardAdminEditor = ({ params }) => {
 
         {isPreviewLoading && <LoadingOverlay message={"Preview is Loading"} />}
       </div>
-      <div
-        className="visible lg:hidden "
-        style={{ position: "absolute", zIndex: 999 }}
-      >
-        {selectedTextIndex === null ? (
-          <BottomDefaultToolbar
-            handleSaveAndPreviewClick={handleSaveAndPreviewClick}
-            handleAddText={handleAddText}
-          />
-        ) : (
-          <BottomTextEditingToolbar
-            selectedTextIndex={selectedTextIndex}
-            showSlider={showSlider}
-            imageData={imageData}
-            selectedImageTextStyles={selectedImageTextStyles}
-            textStyles={textStyles}
-            handleFontSizeChange={handleFontSizeChange}
-            setShowModal={setShowModal}
-            handleSaveClick={handleSaveClick}
-            handleSaveToDatabase={handleSaveToDatabase}
-            handleAddText={handleAddText}
-            devtools={devtools}
-            handleLeftChange={handleLeftChange}
-            handleTopChange={handleTopChange}
-            handleTextAlignChange={handleTextAlignChange}
-            handleMoveToXAxisLeft={handleMoveToXAxisLeft}
-            handleMoveToXAxisRight={handleMoveToXAxisRight}
-            handleCenterText={handleCenterText}
-            handleMoveToYAxisTop={handleMoveToYAxisTop}
-            handleMoveToYAxisCenter={handleMoveToYAxisCenter}
-            handleMoveToYAxisBottom={handleMoveToYAxisBottom}
-            handleFontChange={handleFontChange}
-            lineHeight={lineHeight}
-            handleLineHeightChange={handleLineHeightChange}
-            letterSpacing={letterSpacing}
-            handleLetterSpacingChange={handleLetterSpacingChange}
-            setColorPickerVisible={setColorPickerVisible}
-            colorPickerVisible={colorPickerVisible}
-            handleFontColorChange={handleFontColorChange}
-            handleImageSizeAdjustment={handleImageSizeAdjustment}
-            widthAdjustment={widthAdjustment}
-            handleWidthAdjustment={handleWidthAdjustment}
-            heightAdjustment={heightAdjustment}
-            handleHeightAdjustment={handleHeightAdjustment}
-            handleUndo={handleUndo}
-            handleRedo={handleRedo}
-            handleSaveAndPreviewClick={handleSaveAndPreviewClick}
-            handleUppercase={handleUppercase}
-            handleLowercase={handleLowercase}
-            handleCapitalize={handleCapitalize}
-            toggleBold={toggleBold}
-            toggleItalic={toggleItalic}
-            toggleUnderline={toggleUnderline}
-            handleResizeMouseDown={handleResizeMouseDown}
-            handleMouseMove={handleMouseMove}
-            handleMouseUp={handleMouseUp}
-            rotationAngle={rotationAngle}
-            incrementFontSize={incrementFontSize}
-            decrementFontSize={decrementFontSize}
-            handleTextChange={handleTextChange}
-            handleUpdateButtonClick={handleUpdateButtonClick}
-          />
-        )}
+
+      <div>
+        <div className="visible lg:hidden " style={{ zIndex: 999 }}>
+          {selectedTextIndex === null ? (
+            <BottomDefaultToolbar
+              handleSaveAndPreviewClick={handleSaveAndPreviewClick}
+              handleAddText={handleAddText}
+            />
+          ) : (
+            <BottomTextEditingToolbar
+              selectedTextIndex={selectedTextIndex}
+              showSlider={showSlider}
+              imageData={imageData}
+              selectedImageTextStyles={selectedImageTextStyles}
+              textStyles={textStyles}
+              handleFontSizeChange={handleFontSizeChange}
+              setShowModal={setShowModal}
+              handleSaveClick={handleSaveClick}
+              handleSaveToDatabase={handleSaveToDatabase}
+              handleAddText={handleAddText}
+              devtools={devtools}
+              handleLeftChange={handleLeftChange}
+              handleTopChange={handleTopChange}
+              handleTextAlignChange={handleTextAlignChange}
+              handleMoveToXAxisLeft={handleMoveToXAxisLeft}
+              handleMoveToXAxisRight={handleMoveToXAxisRight}
+              handleCenterText={handleCenterText}
+              handleMoveToYAxisTop={handleMoveToYAxisTop}
+              handleMoveToYAxisCenter={handleMoveToYAxisCenter}
+              handleMoveToYAxisBottom={handleMoveToYAxisBottom}
+              handleFontChange={handleFontChange}
+              lineHeight={lineHeight}
+              handleLineHeightChange={handleLineHeightChange}
+              letterSpacing={letterSpacing}
+              handleLetterSpacingChange={handleLetterSpacingChange}
+              setColorPickerVisible={setColorPickerVisible}
+              colorPickerVisible={colorPickerVisible}
+              handleFontColorChange={handleFontColorChange}
+              handleImageSizeAdjustment={handleImageSizeAdjustment}
+              widthAdjustment={widthAdjustment}
+              handleWidthAdjustment={handleWidthAdjustment}
+              heightAdjustment={heightAdjustment}
+              handleHeightAdjustment={handleHeightAdjustment}
+              handleUndo={handleUndo}
+              handleRedo={handleRedo}
+              handleSaveAndPreviewClick={handleSaveAndPreviewClick}
+              handleUppercase={handleUppercase}
+              handleLowercase={handleLowercase}
+              handleCapitalize={handleCapitalize}
+              toggleBold={toggleBold}
+              toggleItalic={toggleItalic}
+              toggleUnderline={toggleUnderline}
+              handleResizeMouseDown={handleResizeMouseDown}
+              handleMouseMove={handleMouseMove}
+              handleMouseUp={handleMouseUp}
+              rotationAngle={rotationAngle}
+              incrementFontSize={incrementFontSize}
+              decrementFontSize={decrementFontSize}
+              handleTextChange={handleTextChange}
+              handleUpdateButtonClick={handleUpdateButtonClick}
+            />
+          )}
+        </div>
       </div>
     </>
   );

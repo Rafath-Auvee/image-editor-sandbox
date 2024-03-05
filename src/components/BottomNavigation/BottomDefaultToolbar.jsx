@@ -17,7 +17,9 @@ const BottomDefaultToolbar = ({
   return (
     <>
       <div className="block lg:hidden">
-        <div className="btm-nav btm-nav-sm flex overflow-x-auto content-start justify-start h-20">
+        <div
+        // className="btm-nav btm-nav-sm flex overflow-x-auto content-start justify-start h-20"
+        >
           <button className="min-w-[16.7%]" onClick={() => handleAddText()}>
             <AddText className="h-5 w-5" />
             <span className="btm-nav-label font-thin">Add Text</span>
