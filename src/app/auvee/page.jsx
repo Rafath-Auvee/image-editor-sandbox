@@ -356,7 +356,7 @@ const SingleCardAdminEditor = ({ params }) => {
           />
         ) : (
           <div
-            className="btm-nav btm-nav-sm flex overflow-x-auto content-start justify-start h-20"
+            className="btm-nav btm-nav-sm flex overflow-x-auto content-start justify-start h-full"
             key={selectedTextIndex}
           >
             <button className="min-w-[16.7%]" onClick={() => handleAddText()}>
