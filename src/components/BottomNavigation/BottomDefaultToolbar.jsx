@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import AddText from "/public/BottomNavigation/AddText.svg";
 import EditText from "/public/BottomNavigation/EditText.svg";
 import FontSelection from "/public/BottomNavigation/FontSelection.svg";
@@ -7,19 +7,13 @@ import FontSizeBottom from "/public/BottomNavigation/FontSizeBottom.svg";
 import FontColorBottom from "/public/BottomNavigation/FontColorBottom.svg";
 import Alignment from "/public/BottomNavigation/Alignment.svg";
 import Spacing from "/public/BottomNavigation/Spacing.svg";
-import ServiceModal from "../ModalForTextEdit/TastyModal";
+import TestModal from "@/app/test-modal/page";
 
 const BottomDefaultToolbar = ({
   handleSaveAndPreviewClick,
   handleAddText,
   ...props
 }) => {
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const toggleModal = () => {
-    console.log(modalOpen);
-    setModalOpen(!modalOpen);
-  };
   return (
     <>
       <div className="block lg:hidden">
@@ -28,16 +22,13 @@ const BottomDefaultToolbar = ({
             <AddText className="h-5 w-5" />
             <span className="btm-nav-label font-thin">Add Text</span>
           </button>
+          <button className="min-w-[16.7%]">
+            <EditText />
+            <span className="btm-nav-label font-thin">Edit Text</span>
+          </button>
           {/* <button className="min-w-[16.7%]">
             <TestModal />
           </button> */}
-          <button
-            onClick={() => toggleModal()}
-            className="text-black toggle-button"
-          >
-            Toggle
-          </button>
-          {modalOpen && <ServiceModal closeModal={toggleModal} />}
           <button className="min-w-[16.7%]">
             <FontSelection />
             <span className="btm-nav-label font-thin">Font</span>
