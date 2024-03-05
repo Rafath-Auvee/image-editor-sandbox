@@ -16,44 +16,63 @@ const BottomDefaultToolbar = ({
 }) => {
   return (
     <>
-      <div className="block lg:hidden">
+      <div
+        className="visible lg:hidden overflow-x-auto w-full"
+        // className="block lg:hidden"
+      >
         <div
-        // className="btm-nav btm-nav-sm flex overflow-x-auto content-start justify-start h-20"
+          // className="btm-nav btm-nav-sm flex overflow-x-auto content-start justify-start h-20"
+          className="flex content-start items-center  h-20 space-x-4"
         >
-          <button className="min-w-[16.7%]" onClick={() => handleAddText()}>
+          <button
+            className="min-w-[16.7%] flex content-start justify-start items-center flex-col"
+            onClick={() => handleAddText()}
+          >
             <AddText className="h-5 w-5" />
             <span className="btm-nav-label font-thin">Add Text</span>
           </button>
-          <button className="min-w-[16.7%]">
+          <button className="min-w-[16.7%] flex content-start justify-start items-center flex-col">
             <EditText />
             <span className="btm-nav-label font-thin">Edit Text</span>
           </button>
-          {/* <button className="min-w-[16.7%]">
+          {/* <button className="min-w-[16.7%] flex content-start justify-start items-center flex-col">
             <TestModal />
           </button> */}
-          <button className="min-w-[16.7%]">
+          <button className="min-w-[16.7%] flex content-start justify-start items-center flex-col">
             <FontSelection />
             <span className="btm-nav-label font-thin">Font</span>
           </button>
-          <button className="min-w-[16.7%]">
+          <button className="min-w-[16.7%] flex content-start justify-start items-center flex-col">
             <FontSizeBottom />
             <span className="btm-nav-label font-thin">Font Size</span>
           </button>
-          <button className="min-w-[16.7%]">
+          <button className="min-w-[16.7%] flex content-start justify-start items-center flex-col">
             <FontColorBottom />
             <span className="btm-nav-label font-thin">Color</span>
           </button>
-          <button className="min-w-[16.7%] text-2xl">B</button>
-          <button className="min-w-[16.7%] text-2xl">I</button>
-          <button className="min-w-[16.7%] text-2xl">U</button>
-          <button className="min-w-[16.7%] text-2xl">AA</button>
-          <button className="min-w-[16.7%] text-2xl">Aa</button>
-          <button className="min-w-[16.7%] text-2xl">aa</button>
-          <button className="min-w-[16.7%]">
+          <button className="min-w-[16.7%] flex content-start justify-start items-center flex-col text-2xl">
+            B
+          </button>
+          <button className="min-w-[16.7%] flex content-start justify-start items-center flex-col text-2xl">
+            I
+          </button>
+          <button className="min-w-[16.7%] flex content-start justify-start items-center flex-col text-2xl">
+            U
+          </button>
+          <button className="min-w-[16.7%] flex content-start justify-start items-center flex-col text-2xl">
+            AA
+          </button>
+          <button className="min-w-[16.7%] flex content-start justify-start items-center flex-col text-2xl">
+            Aa
+          </button>
+          <button className="min-w-[16.7%] flex content-start justify-start items-center flex-col text-2xl">
+            aa
+          </button>
+          <button className="min-w-[16.7%] flex content-start justify-start items-center flex-col">
             <Alignment />
             <span className="btm-nav-label font-thin">Alignment</span>
           </button>
-          <button className="min-w-[16.7%]">
+          <button className="min-w-[16.7%] flex content-start justify-start items-center flex-col">
             <Spacing />
             <span className="btm-nav-label font-thin"> Spacing</span>
           </button>

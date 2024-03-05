@@ -114,8 +114,10 @@ const BottomTextEditingToolbar = ({
           // style={{ position: "absolute", zIndex: 999 }}
         >
           <button className="min-w-[16.7%]" onClick={() => handleAddText()}>
-            <AddText className="h-5 w-5" />
-            <span className="btm-nav-label font-thin">Add Text</span>
+            <div className="flex flex-col justify-center text-center items-center">
+              <AddText className="h-5 w-5" />
+              <span className="btm-nav-label font-thin">Add Text</span>
+            </div>
           </button>
 
           {/* {modalOpen && <ServiceModal closeModal={toggleModal} />} */}
@@ -593,7 +595,7 @@ const BottomTextEditingToolbar = ({
             /> */}
           </button>
 
-          <div className="min-w-[16.7%]">
+          <div className="min-w-[16.7%] flex flex-col justify-center ">
             <div>
               <label
                 className="flex flex-col justify-center items-center gap-y-1"
